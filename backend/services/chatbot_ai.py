@@ -36,7 +36,7 @@ def generate_chat_response(
             conversation_text += f"User: {message}\nAssistant:"
 
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=settings.GEMINI_MODEL,
                 contents=conversation_text
             )
             return {

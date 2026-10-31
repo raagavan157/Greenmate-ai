@@ -132,7 +132,7 @@ If the image does not show a plant or is unrecognizable, set confidence below 0.
 Do not wrap in markdown quotes if possible, output raw JSON.
 """
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=settings.GEMINI_MODEL,
                 contents=[
                     types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"),
                     prompt

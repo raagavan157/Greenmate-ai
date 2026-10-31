@@ -1,5 +1,7 @@
 import json
 import logging
+import os
+import tempfile
 import threading
 import time
 import uuid
@@ -18,6 +20,12 @@ except Exception:
     CA_FILE = None
 
 from config import settings
+
+IS_VERCEL = bool(
+    os.getenv("VERCEL") 
+    or os.getenv("AWS_LAMBDA_FUNCTION_NAME") 
+    or "/var/task" in str(Path(__file__).resolve())
+)
 
 logger = logging.getLogger("greenmate.db")
 logging.basicConfig(level=logging.INFO)
@@ -271,22 +279,56 @@ class DatabaseManager:
         self.is_atlas: bool = False
         self.last_atlas_error: Optional[str] = None
         self.reconnect_thread_started: bool = False
-        self.data_file: Path = Path(__file__).resolve().parent / "data" / "db.json"
+        self._initialized: bool = False
+
+        # Read-only seed path (inside package)
+        seed_cand = Path(__file__).resolve().parent / "data" / "seed.json"
+        if seed_cand.exists():
+            self.readonly_seed_file: Path = seed_cand
+        else:
+            self.readonly_seed_file: Path = Path(__file__).resolve().parent / "data" / "db.json"
+        
+        # Writable file path (never inside /var/task on Vercel)
+        if IS_VERCEL:
+            self.data_file: Path = Path(tempfile.gettempdir()) / "greenmate_data" / "db.json"
+        else:
+            self.data_file: Path = self.readonly_seed_file
+
         self.data: Dict[str, List[Dict[str, Any]]] = {c: [] for c in COLLECTIONS}
         self.local_collections: Dict[str, LocalCollection] = {}
         self.resilient_collections: Dict[str, ResilientCollection] = {}
 
     def init_db(self):
-        # 1. Load local persistent JSON document store
-        self.data_file.parent.mkdir(parents=True, exist_ok=True)
+        if self._initialized:
+            return
+        self._initialized = True
+
+        # 1. Load local persistent JSON document store safely without crashing on read-only FS
+        content = None
         if self.data_file.exists():
             try:
                 with open(self.data_file, "r", encoding="utf-8") as f:
-                    content = f.read()
-                    if content.strip():
-                        self.data = json.loads(content)
+                    c = f.read()
+                    if c.strip():
+                        content = c
             except Exception as e:
-                logger.warning(f"Error reading local db.json: {e}")
+                logger.warning(f"Error reading {self.data_file}: {e}")
+
+        # If data_file had no content or didn't exist, read from bundled seed
+        if not content and self.readonly_seed_file.exists():
+            try:
+                with open(self.readonly_seed_file, "r", encoding="utf-8") as f:
+                    c = f.read()
+                    if c.strip():
+                        content = c
+            except Exception as e:
+                logger.warning(f"Error reading {self.readonly_seed_file}: {e}")
+
+        if content:
+            try:
+                self.data = json.loads(content)
+            except Exception as e:
+                logger.warning(f"Error parsing db.json content: {e}")
 
         for c in COLLECTIONS:
             if c not in self.data:
@@ -297,8 +339,8 @@ class DatabaseManager:
         # 2. Attempt MongoDB Atlas Connection
         self.connect_atlas()
 
-        # 3. Start background auto-reconnection and auto-sync thread
-        if not self.reconnect_thread_started:
+        # 3. Start background auto-reconnection and auto-sync thread (only on non-serverless)
+        if not IS_VERCEL and not self.reconnect_thread_started:
             self.reconnect_thread_started = True
             t = threading.Thread(target=self._background_atlas_monitor, daemon=True)
             t.start()
@@ -312,9 +354,13 @@ class DatabaseManager:
 
         try:
             client_kwargs = {
-                "serverSelectionTimeoutMS": 3000,
-                "connectTimeoutMS": 3000,
-                "socketTimeoutMS": 4000
+                "serverSelectionTimeoutMS": 5000,
+                "connectTimeoutMS": 5000,
+                "socketTimeoutMS": 6000,
+                "maxPoolSize": 10,
+                "minPoolSize": 1,
+                "maxIdleTimeMS": 45000,
+                "retryWrites": True
             }
             if CA_FILE:
                 client_kwargs["tlsCAFile"] = CA_FILE
@@ -387,8 +433,11 @@ class DatabaseManager:
 
     def save(self):
         try:
+            self.data_file.parent.mkdir(parents=True, exist_ok=True)
             with open(self.data_file, "w", encoding="utf-8") as f:
                 json.dump(self.data, f, indent=2, default=str)
+        except (OSError, PermissionError) as e:
+            logger.warning(f"Local storage write skipped on read-only filesystem: {e}")
         except Exception as e:
             logger.error(f"Failed to persist local db: {e}")
 
@@ -408,4 +457,6 @@ class DatabaseManager:
 db_manager = DatabaseManager()
 
 def get_db():
+    if not db_manager._initialized:
+        db_manager.init_db()
     return db_manager

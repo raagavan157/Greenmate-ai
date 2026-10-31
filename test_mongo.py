@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 # Load .env
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
-mongo_uri = os.getenv("MONGO_URI", "")
-db_name = os.getenv("DB_NAME", "greenmate_db")
+mongo_uri = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI", "")
+db_name = os.getenv("DATABASE_NAME") or os.getenv("DB_NAME", "greenmate_db")
 
 print("==================================================")
 print("GreenMate AI - MongoDB Connection Test")

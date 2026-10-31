@@ -125,7 +125,7 @@ Return ONLY a valid JSON object matching:
 If the photo does not clearly show symptoms or confidence is low, clearly state uncertainty.
 """
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=settings.GEMINI_MODEL,
                 contents=[
                     types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg"),
                     prompt

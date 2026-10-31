@@ -37,14 +37,14 @@ app.add_middleware(
 # Startup Lifecycle
 @app.on_event("startup")
 def on_startup():
-    db_manager.init_db()
-    seed_database(db_manager)
+    try:
+        db_manager.init_db()
+        seed_database(db_manager)
+    except Exception as e:
+        print(f"Non-critical startup init warning: {e}")
     print("==================================================")
-    print("GreenMate AI Backend Started Successfully")
-    print(f"Database Engine: {'MongoDB Atlas' if db_manager.is_atlas else 'Local Document Store (db.json)'}")
-    print(f"Gemini AI Status: {'Configured' if (settings.GEMINI_API_KEY and not settings.GEMINI_API_KEY.startswith('your_')) else 'Botanical Engine Mode (Set GEMINI_API_KEY in .env for Cloud Vision)'}")
-    print(f"Server running at: http://{settings.HOST}:{settings.PORT}")
-    print(f"Interactive Swagger Docs: http://{settings.HOST}:{settings.PORT}/api/docs")
+    print("GreenMate AI Backend Ready")
+    print(f"Database Engine: {'MongoDB Atlas' if db_manager.is_atlas else 'Local Document Store (Resilient Mode)'}")
     print("==================================================")
 
 # Include API Routers
@@ -74,13 +74,15 @@ def health_check():
         }
     }
 
-# Mount uploads directory
-uploads_dir = backend_dir / "uploads"
-uploads_dir.mkdir(parents=True, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=str(uploads_dir)), name="uploads")
+# Mount uploads directory safely
+uploads_dir = settings.ensure_upload_dir()
+if uploads_dir.exists():
+    app.mount("/uploads", StaticFiles(directory=str(uploads_dir)), name="uploads")
 
 # Frontend directory
 frontend_dir = backend_dir.parent / "frontend"
+if not frontend_dir.exists():
+    frontend_dir = backend_dir / "frontend"
 if frontend_dir.exists():
     app.mount("/css", StaticFiles(directory=str(frontend_dir / "css")), name="css")
     app.mount("/js", StaticFiles(directory=str(frontend_dir / "js")), name="js")

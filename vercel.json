@@ -1,0 +1,73 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/css/(.*)",
+      "destination": "/frontend/css/$1"
+    },
+    {
+      "source": "/js/(.*)",
+      "destination": "/frontend/js/$1"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/frontend/assets/$1"
+    },
+    {
+      "source": "/explore",
+      "destination": "/frontend/explore.html"
+    },
+    {
+      "source": "/plant-details",
+      "destination": "/frontend/plant-details.html"
+    },
+    {
+      "source": "/ai-doctor",
+      "destination": "/frontend/ai-doctor.html"
+    },
+    {
+      "source": "/my-garden",
+      "destination": "/frontend/my-garden.html"
+    },
+    {
+      "source": "/guides",
+      "destination": "/frontend/guides.html"
+    },
+    {
+      "source": "/track-order",
+      "destination": "/frontend/track-order.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/frontend/admin.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/frontend/login.html"
+    },
+    {
+      "source": "/register",
+      "destination": "/frontend/register.html"
+    },
+    {
+      "source": "/profile",
+      "destination": "/frontend/profile.html"
+    },
+    {
+      "source": "/((?!api/|uploads/|css/|js/|assets/).*)",
+      "destination": "/frontend/$1"
+    },
+    {
+      "source": "/",
+      "destination": "/frontend/index.html"
+    }
+  ]
+}

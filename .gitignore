@@ -15,6 +15,7 @@ backend/.env
 
 # Database local storage / uploads
 backend/data/*.json
+!backend/data/seed.json
 backend/uploads/
 *.sqlite3
 

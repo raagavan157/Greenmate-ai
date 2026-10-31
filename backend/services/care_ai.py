@@ -53,7 +53,7 @@ Return ONLY a JSON object:
 }}
 """
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=settings.GEMINI_MODEL,
                 contents=prompt
             )
             raw = response.text.strip()

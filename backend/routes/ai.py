@@ -1,3 +1,4 @@
+import logging
 import os
 import uuid
 from datetime import datetime
@@ -12,18 +13,34 @@ from utils.auth import get_current_user_optional, get_current_user
 from database import get_db
 from config import settings
 
+try:
+    import cloudinary
+    import cloudinary.uploader
+    if settings.has_cloudinary:
+        cloudinary.config(
+            cloud_name=settings.CLOUDINARY_CLOUD_NAME,
+            api_key=settings.CLOUDINARY_API_KEY,
+            api_secret=settings.CLOUDINARY_API_SECRET,
+            secure=True
+        )
+except Exception:
+    pass
+
+logger = logging.getLogger("greenmate.ai.upload")
 router = APIRouter(prefix="/api/ai", tags=["AI Features"])
 
 ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
-def validate_and_save_upload(file: UploadFile) -> str:
+def validate_and_save_upload(file: UploadFile) -> tuple:
+    """Safely validate, save to temporary buffer, and upload to Cloudinary if available."""
     ext = os.path.splitext(file.filename)[1].lower() if file.filename else ".jpg"
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(status_code=400, detail="Invalid image format. Allowed: JPG, PNG, WEBP.")
     
     unique_name = f"{uuid.uuid4().hex}{ext}"
-    dest_path = settings.UPLOAD_DIR / unique_name
+    upload_dir = settings.ensure_upload_dir()
+    dest_path = upload_dir / unique_name
     
     # Save file contents
     content = file.file.read()
@@ -32,8 +49,24 @@ def validate_and_save_upload(file: UploadFile) -> str:
     
     with open(dest_path, "wb") as f:
         f.write(content)
-        
-    return str(dest_path), f"/uploads/{unique_name}"
+
+    public_url = f"/uploads/{unique_name}"
+
+    # Persistent cloud storage via Cloudinary if configured
+    if settings.has_cloudinary:
+        try:
+            upload_res = cloudinary.uploader.upload(
+                str(dest_path),
+                folder="greenmate_plants",
+                resource_type="image"
+            )
+            cloud_url = upload_res.get("secure_url") or upload_res.get("url")
+            if cloud_url:
+                public_url = cloud_url
+        except Exception as e:
+            logger.warning(f"Cloudinary upload failed ({e}). Using temporary relative path: {public_url}")
+
+    return str(dest_path), public_url
 
 @router.post("/identify", response_model=PlantIdentifyResponse)
 def identify_plant(

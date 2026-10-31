@@ -3,9 +3,9 @@
  * Handles all REST API communications with the FastAPI backend.
  */
 
-const API_BASE = window.location.protocol && window.location.protocol.startsWith('http') 
-  ? '' 
-  : 'http://127.0.0.1:8000';
+const API_BASE = (typeof window !== 'undefined' && window.GREENMATE_API_URL) 
+  ? window.GREENMATE_API_URL 
+  : (window.location.protocol && window.location.protocol.startsWith('http') ? '' : 'http://127.0.0.1:8000');
 
 const API = {
   getToken() {
