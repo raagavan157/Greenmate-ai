@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 # Add backend directory to sys.path
 backend_dir = Path(__file__).resolve().parent
@@ -145,6 +146,47 @@ if frontend_dir.exists():
     @app.get("/profile", tags=["Frontend"])
     def serve_profile():
         return FileResponse(frontend_dir / "profile.html")
+
+    # Comprehensive Wildcard SPA Route (prevents any frontend 404 Not Found error)
+    @app.get("/{full_path:path}", tags=["Frontend"])
+    def serve_wildcard_frontend(full_path: str):
+        # Allow API endpoints to be treated normally
+        if full_path.startswith("api/") or full_path == "api":
+            return JSONResponse(status_code=404, content={"detail": "API endpoint not found"})
+        
+        # 1. Exact match in frontend (e.g. /favicon.ico, /robots.txt, etc.)
+        direct_file = frontend_dir / full_path
+        if direct_file.is_file() and direct_file.exists():
+            return FileResponse(direct_file)
+
+        # 2. Match with .html appended (e.g. /explore -> /explore.html)
+        html_file = frontend_dir / f"{full_path}.html"
+        if html_file.is_file() and html_file.exists():
+            return FileResponse(html_file)
+
+        # 3. Fallback to index.html
+        return FileResponse(frontend_dir / "index.html")
+
+# Global 404 Exception Handler for FastAPI / Starlette
+@app.exception_handler(StarletteHTTPException)
+async def custom_404_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        if request.url.path.startswith("/api"):
+            return JSONResponse(status_code=404, content={"detail": exc.detail or "Not Found"})
+        
+        req_path = request.url.path.strip("/").split("?")[0]
+        if req_path and frontend_dir.exists():
+            html_candidate = frontend_dir / f"{req_path}.html"
+            if html_candidate.exists():
+                return FileResponse(html_candidate)
+            file_candidate = frontend_dir / req_path
+            if file_candidate.is_file() and file_candidate.exists():
+                return FileResponse(file_candidate)
+        
+        if (frontend_dir / "index.html").exists():
+            return FileResponse(frontend_dir / "index.html")
+
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 if __name__ == "__main__":
     import uvicorn
