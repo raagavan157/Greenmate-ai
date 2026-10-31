@@ -1,5 +1,6 @@
 import os
 import sys
+import traceback
 from pathlib import Path
 
 # Add backend directory to sys.path
@@ -14,8 +15,21 @@ for d in [str(backend_dir), str(root_dir)]:
 if os.getenv("VERCEL") or "/var/task" in str(Path(__file__).resolve()):
     os.environ["VERCEL"] = "1"
 
-# Import existing FastAPI application
-from backend.main import app
+try:
+    from backend.main import app
+except Exception as e:
+    from fastapi import FastAPI
+    from fastapi.responses import PlainTextResponse
+
+    app = FastAPI(title="GreenMate AI - Diagnostic Fallback")
+    _err_trace = traceback.format_exc()
+
+    @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"])
+    def boot_error_handler(path: str = ""):
+        return PlainTextResponse(
+            f"GreenMate AI Serverless Startup Diagnostics:\n\n{_err_trace}\n\nSys.path:\n" + "\n".join(sys.path),
+            status_code=500
+        )
 
 if __name__ == "__main__":
     import uvicorn
