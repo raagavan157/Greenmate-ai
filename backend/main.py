@@ -209,6 +209,10 @@ async def custom_404_handler(request: Request, exc: StarletteHTTPException):
 
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
+# Vercel entrypoint aliases
+handler = app
+application = app
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host=settings.HOST, port=settings.PORT, reload=True)
