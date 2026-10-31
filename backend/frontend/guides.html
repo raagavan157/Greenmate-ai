@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plant Care Guides & Botanical Wisdom - GreenMate AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="top-bar">
+      <div class="container top-bar-inner">
+        <div class="top-bar-left">
+          <a href="/guides.html" class="top-bar-link">Help</a>
+          <a href="/track-order.html" class="top-bar-link">Track Order</a>
+          <a href="/guides.html" class="top-bar-link">Plant Care Guide</a>
+          <a href="/#about-section" class="top-bar-link">About Us</a>
+        </div>
+        <div class="top-bar-right">
+          <span class="tagline-badge">🌱 Grow Smarter. Live Greener.</span>
+          <a href="/profile.html" class="top-action-link">
+            <span>Wishlist</span>
+            <span id="wishlist-badge" class="badge-count">0</span>
+          </a>
+          <a href="/my-garden.html" class="top-action-link">
+            <span>My Garden</span>
+            <span id="garden-badge" class="badge-count">0</span>
+          </a>
+          <div id="header-auth-container">
+            <a href="/login.html" class="top-action-link">Login / Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-header">
+      <div class="container main-header-inner">
+        <a href="/" class="brand-logo">
+          <svg class="logo-leaf" viewBox="0 0 32 32" fill="none">
+            <path d="M6 26C6 26 8 16 18 10C28 4 28 4 28 4C28 4 28 14 22 20C16 26 6 26 6 26Z" fill="#133e29"/>
+            <path d="M11 23C15 19 20 15 28 4" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span>GreenMate <span class="ai-suffix">AI</span></span>
+        </a>
+
+        <div class="search-container">
+          <form class="search-form" action="/explore.html" method="GET">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" name="search" class="search-input" placeholder="Search plants, care guides, or categories...">
+            <button type="submit" class="btn-search">Search</button>
+          </form>
+        </div>
+
+        <div class="mobile-nav-toggle"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+
+    <nav class="nav-bar">
+      <div class="container">
+        <ul class="nav-links">
+          <li class="nav-item"><a href="/">Home</a></li>
+          <li class="nav-item"><a href="/explore.html">Explore Plants</a></li>
+          <li class="nav-item"><a href="/ai-doctor.html">AI Plant Doctor</a></li>
+          <li class="nav-item"><a href="/my-garden.html">My Garden</a></li>
+          <li class="nav-item active"><a href="/guides.html">Plant Care</a></li>
+          <li class="nav-item"><a href="/track-order.html">Track Order</a></li>
+          <li class="nav-item"><a href="/#about-section">About</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- BANNER -->
+  <section style="background:var(--mint-bg); padding:44px 0 34px; border-bottom:1px solid var(--mint-border);">
+    <div class="container" style="max-width:760px; text-align:center;">
+      <span style="font-size:0.8rem; font-weight:800; text-transform:uppercase; color:var(--primary-emerald); background:#ffffff; padding:4px 14px; border-radius:var(--radius-full); display:inline-block; margin-bottom:10px;">
+        Botanical Knowledge Library
+      </span>
+      <h1 style="font-size:2.6rem; font-weight:800; color:var(--primary-forest); margin-bottom:10px;">Plant Care Guides & Wisdom</h1>
+      <p style="color:var(--text-muted); font-size:1.1rem; line-height:1.6;">
+        Master the fundamental horticultural arts of hydration, natural illumination, potting substrates, seasonal dormancy, and pest defenses.
+      </p>
+    </div>
+  </section>
+
+  <!-- GUIDES LIST -->
+  <section style="padding:50px 0 80px;">
+    <div class="container">
+      <div id="guides-library-grid" class="guides-grid" style="grid-template-columns: repeat(3, 1fr); gap:24px;">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDE DETAIL MODAL -->
+  <div id="guide-detail-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:700px;">
+      <div class="modal-header">
+        <h3 id="guide-modal-title">Care Guide</h3>
+        <button class="modal-close-btn">✕</button>
+      </div>
+      <div id="guide-modal-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom-bar" style="border:none; padding:0;">
+        <p>© 2026 GreenMate AI. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING CHATBOT -->
+  <div class="chatbot-wrapper">
+    <div id="chatbot-panel" class="chatbot-panel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="chat-bot-avatar">🌿</div>
+          <div class="chat-title-wrap">
+            <h4>GreenMate AI</h4>
+            <div class="chat-status-indicator"><span class="status-dot-pulse"></span> Online</div>
+          </div>
+        </div>
+        <button id="chat-close-btn" class="btn-chat-close">✕</button>
+      </div>
+      <div id="chat-body" class="chat-body">
+        <div class="chat-bubble bot">Hi! Have questions on any plant care technique? Ask me!</div>
+      </div>
+      <div class="chat-footer">
+        <form id="chat-input-form" class="chat-input-form">
+          <input type="text" id="chat-user-input" class="chat-input" placeholder="Type your message..." autocomplete="off">
+          <button type="submit" class="btn-chat-send">→</button>
+        </form>
+      </div>
+    </div>
+    <button id="chatbot-trigger" class="chatbot-trigger-btn">🌿</button>
+  </div>
+
+  <!-- NATIVE MOBILE APP BOTTOM NAVIGATION DOCK -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/explore.html" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Catalog</span>
+    </a>
+    <a href="/ai-doctor.html" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span>AI Doctor</span>
+    </a>
+    <a href="/my-garden.html" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22v-9"/><path d="M9 15c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M15 11c3 0 5-2 5-5-3 0-5 2-5 5z"/><path d="M4 22h16"/></svg>
+      <span>My Garden</span>
+    </a>
+    <a href="/track-order.html" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16v-2"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      <span>Track Order</span>
+    </a>
+  </nav>
+
+  <!-- JavaScript Modules -->
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/plants.js"></script>
+  <script src="/js/garden.js"></script>
+  <script src="/js/ai-doctor.js"></script>
+  <script src="/js/chatbot.js"></script>
+  <script src="/js/app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('guides-library-grid');
+      API.getGuides().then(guides => {
+        container.innerHTML = guides.map(g => `
+          <div onclick="App.openGuideModal('${g.id}')" class="guide-card" style="border-radius:18px;">
+            <div class="guide-thumb-wrap" style="height:190px;">
+              <img src="${g.image_url}" class="guide-thumb" alt="${g.title}">
+            </div>
+            <div class="guide-card-body" style="padding:20px;">
+              <div style="font-size:0.75rem; font-weight:700; color:#16a34a; text-transform:uppercase; margin-bottom:4px;">
+                ${g.category} • ${g.read_time}
+              </div>
+              <h3 style="font-size:1.2rem; font-weight:800; color:#133e29; margin-bottom:6px;">${g.title}</h3>
+              <p style="font-size:0.875rem; color:#5e7367; line-height:1.5; margin-bottom:16px;">${g.subtitle}</p>
+              <div class="guide-card-footer" style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.85rem; font-weight:700; color:#133e29;">Read Article →</span>
+                <span class="btn-guide-arrow">📖</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }).catch(err => {
+        container.innerHTML = `<p style="grid-column:1/-1; color:#ef4444;">Failed to load guides: ${err.message}</p>`;
+      });
+    });
+  </script>
+</body>
+</html>

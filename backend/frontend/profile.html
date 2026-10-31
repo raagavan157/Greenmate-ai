@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile & Wishlist - GreenMate AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="top-bar">
+      <div class="container top-bar-inner">
+        <div class="top-bar-left">
+          <a href="/guides.html" class="top-bar-link">Help</a>
+          <a href="/track-order.html" class="top-bar-link">Track Order</a>
+          <a href="/guides.html" class="top-bar-link">Plant Care Guide</a>
+          <a href="/#about-section" class="top-bar-link">About Us</a>
+        </div>
+        <div class="top-bar-right">
+          <span class="tagline-badge">🌱 Grow Smarter. Live Greener.</span>
+          <a href="/profile.html" class="top-action-link">
+            <span>Wishlist</span>
+            <span id="wishlist-badge" class="badge-count">0</span>
+          </a>
+          <a href="/my-garden.html" class="top-action-link">
+            <span>My Garden</span>
+            <span id="garden-badge" class="badge-count">0</span>
+          </a>
+          <div id="header-auth-container">
+            <a href="/login.html" class="top-action-link">Login / Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-header">
+      <div class="container main-header-inner">
+        <a href="/" class="brand-logo">
+          <svg class="logo-leaf" viewBox="0 0 32 32" fill="none">
+            <path d="M6 26C6 26 8 16 18 10C28 4 28 4 28 4C28 4 28 14 22 20C16 26 6 26 6 26Z" fill="#133e29"/>
+            <path d="M11 23C15 19 20 15 28 4" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span>GreenMate <span class="ai-suffix">AI</span></span>
+        </a>
+
+        <div class="search-container">
+          <form class="search-form" action="/explore.html" method="GET">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" name="search" class="search-input" placeholder="Search plants, care guides, or categories...">
+            <button type="submit" class="btn-search">Search</button>
+          </form>
+        </div>
+
+        <div class="mobile-nav-toggle"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+
+    <nav class="nav-bar">
+      <div class="container">
+        <ul class="nav-links">
+          <li class="nav-item"><a href="/">Home</a></li>
+          <li class="nav-item"><a href="/explore.html">Explore Plants</a></li>
+          <li class="nav-item"><a href="/ai-doctor.html">AI Plant Doctor</a></li>
+          <li class="nav-item"><a href="/my-garden.html">My Garden</a></li>
+          <li class="nav-item"><a href="/guides.html">Plant Care</a></li>
+          <li class="nav-item"><a href="/#about-section">About</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- PROFILE MAIN -->
+  <main style="padding:48px 0 80px; background:#fbfdfc;">
+    <div class="container" style="max-width:960px;">
+      
+      <!-- Profile Card -->
+      <div style="background:#ffffff; border-radius:24px; padding:32px; border:1px solid var(--border-light); box-shadow:var(--shadow-sm); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:24px; margin-bottom:40px;">
+        <div style="display:flex; align-items:center; gap:20px;">
+          <img id="profile-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=PlantLover" style="width:72px; height:72px; border-radius:var(--radius-full); background:var(--mint-pill); border:2px solid var(--primary-accent);" alt="Avatar">
+          <div>
+            <h2 id="profile-name" style="font-size:1.6rem; font-weight:800; color:var(--primary-forest);">Botanist</h2>
+            <p id="profile-email" style="color:var(--text-muted); font-size:0.95rem;">loading@greenmate.ai</p>
+            <span style="font-size:0.75rem; color:#16a34a; font-weight:700;">Active GreenMate Explorer 🌱</span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px;">
+          <a href="/my-garden.html" class="btn-primary-pill">View My Garden</a>
+          <button onclick="Auth.logout()" class="btn-danger-outline" style="padding:10px 20px; font-size:0.9rem;">Sign Out</button>
+        </div>
+      </div>
+
+      <!-- Wishlist Section -->
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <div>
+            <h3 style="font-size:1.4rem; font-weight:800; color:var(--primary-forest);">My Saved Wishlist</h3>
+            <p style="color:var(--text-muted); font-size:0.875rem;">Plants you are planning to add to your collection</p>
+          </div>
+          <span id="wishlist-total-count" style="font-weight:700; color:var(--primary-emerald); font-size:0.9rem;">0 plants</span>
+        </div>
+
+        <div id="profile-wishlist-grid" class="plants-grid">
+          <div style="grid-column:1/-1; text-align:center; padding:30px;"><div class="spinner"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom-bar" style="border:none; padding:0;">
+        <p>© 2026 GreenMate AI. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript Modules -->
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/plants.js"></script>
+  <script src="/js/garden.js"></script>
+  <script src="/js/ai-doctor.js"></script>
+  <script src="/js/chatbot.js"></script>
+  <script src="/js/app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      setTimeout(async () => {
+        if (!Auth.isAuthenticated()) {
+          window.location.href = '/login.html?redirect=/profile.html';
+          return;
+        }
+
+        const user = Auth.currentUser;
+        document.getElementById('profile-name').textContent = user.name;
+        document.getElementById('profile-email').textContent = user.email;
+        if (user.avatar) {
+          document.getElementById('profile-avatar').src = user.avatar;
+        }
+
+        // Load wishlist
+        const container = document.getElementById('profile-wishlist-grid');
+        try {
+          const wishes = await API.getWishlist();
+          document.getElementById('wishlist-total-count').textContent = `${wishes.length} plant${wishes.length === 1 ? '' : 's'}`;
+
+          if (wishes.length === 0) {
+            container.innerHTML = `
+              <div style="grid-column:1/-1; text-align:center; padding:40px; background:#f8faf8; border-radius:18px;">
+                <p style="font-weight:700; color:#133e29; font-size:1.1rem;">Your wishlist is currently empty.</p>
+                <p style="color:#5e7367; font-size:0.9rem; margin-top:4px;">Browse the plant collection and tap the heart icon to save species here.</p>
+                <a href="/explore.html" class="btn-primary-pill" style="display:inline-flex; margin-top:16px;">Explore Plants</a>
+              </div>
+            `;
+            return;
+          }
+
+          container.innerHTML = wishes.map(w => Plants.renderCard(w)).join('');
+        } catch (err) {
+          container.innerHTML = `<p style="grid-column:1/-1; color:#ef4444;">Failed to load wishlist: ${err.message}</p>`;
+        }
+      }, 150);
+    });
+  </script>
+</body>
+</html>

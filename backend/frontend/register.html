@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - GreenMate AI</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body style="background:var(--mint-bg); min-height:100vh; display:flex; flex-direction:column;">
+
+  <!-- Simple Header -->
+  <header style="background:#ffffff; border-bottom:1px solid var(--border-light); padding:16px 0;">
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="/" class="brand-logo">
+        <svg class="logo-leaf" viewBox="0 0 32 32" fill="none">
+          <path d="M6 26C6 26 8 16 18 10C28 4 28 4 28 4C28 4 28 14 22 20C16 26 6 26 6 26Z" fill="#133e29"/>
+          <path d="M11 23C15 19 20 15 28 4" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>GreenMate <span class="ai-suffix">AI</span></span>
+      </a>
+      <a href="/" style="font-weight:700; color:var(--primary-forest); font-size:0.9rem;">← Back to Home</a>
+    </div>
+  </header>
+
+  <!-- Auth Card Container -->
+  <main style="flex:1; display:flex; align-items:center; justify-content:center; padding:40px 16px;">
+    <div style="background:#ffffff; width:100%; max-width:440px; border-radius:24px; padding:36px; box-shadow:var(--shadow-lg); border:1px solid var(--border-light);">
+      
+      <div style="text-align:center; margin-bottom:28px;">
+        <span style="font-size:2rem;">🌿</span>
+        <h2 style="font-size:1.8rem; font-weight:800; color:var(--primary-forest); margin-top:8px;">Join GreenMate AI</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:4px;">Start smart garden tracking, AI diagnosis, and custom care plans.</p>
+      </div>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="reg-name" class="form-control" required placeholder="e.g. Alex Green">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="reg-email" class="form-control" required placeholder="name@example.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Create Password (min. 6 characters)</label>
+          <input type="password" id="reg-password" class="form-control" minlength="6" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" id="btn-reg-submit" class="btn-primary-solid" style="width:100%; padding:12px; font-size:0.95rem; margin-top:10px;">
+          Create My Account
+        </button>
+      </form>
+
+      <div style="text-align:center; margin-top:24px; font-size:0.85rem; color:var(--text-muted); border-top:1px solid var(--border-light); padding-top:20px;">
+        Already have an account? 
+        <a href="/login.html" style="font-weight:700; color:var(--primary-forest); text-decoration:underline;">Sign In</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer style="text-align:center; padding:16px; font-size:0.8rem; color:#87998e;">
+    © 2026 GreenMate AI. Data stored securely in MongoDB Atlas.
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+
+  <script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const btn = document.getElementById('btn-reg-submit');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner" style="width:16px; height:16px;"></span> Creating Account...';
+
+      try {
+        await Auth.register(name, email, password);
+        App.showToast('Account created successfully! Welcome to GreenMate AI! 🌿', 'success');
+        setTimeout(() => {
+          window.location.href = '/my-garden.html';
+        }, 600);
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = 'Create My Account';
+        App.showToast(err.message, 'error');
+      }
+    });
+  </script>
+</body>
+</html>
