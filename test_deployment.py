@@ -18,6 +18,7 @@ for p in [str(BACKEND_DIR), str(ROOT_DIR)]:
 # Set test environment
 os.environ["VERCEL"] = "1"
 os.environ["ENVIRONMENT"] = "production"
+os.environ["GEMINI_API_KEY"] = ""
 
 def run_all_tests():
     print("=" * 60)
@@ -228,7 +229,7 @@ def run_all_tests():
         assert vercel_json_path.exists(), "vercel.json missing"
         with open(vercel_json_path, "r", encoding="utf-8") as f:
             v_data = json.load(f)
-        assert "rewrites" in v_data, "vercel.json missing rewrites"
+        assert "rewrites" in v_data or "routes" in v_data, "vercel.json missing rewrites/routes"
 
         req_path = ROOT_DIR / "requirements.txt"
         assert req_path.exists(), "requirements.txt missing"

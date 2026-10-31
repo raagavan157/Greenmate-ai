@@ -353,10 +353,11 @@ class DatabaseManager:
             return False
 
         try:
+            timeout_ms = 2000 if IS_VERCEL else 5000
             client_kwargs = {
-                "serverSelectionTimeoutMS": 5000,
-                "connectTimeoutMS": 5000,
-                "socketTimeoutMS": 6000,
+                "serverSelectionTimeoutMS": timeout_ms,
+                "connectTimeoutMS": timeout_ms,
+                "socketTimeoutMS": timeout_ms + 1000,
                 "maxPoolSize": 10,
                 "minPoolSize": 1,
                 "maxIdleTimeMS": 45000,

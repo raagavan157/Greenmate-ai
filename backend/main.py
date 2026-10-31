@@ -84,70 +84,87 @@ frontend_dir = backend_dir.parent / "frontend"
 if not frontend_dir.exists():
     frontend_dir = backend_dir / "frontend"
 if frontend_dir.exists():
-    app.mount("/css", StaticFiles(directory=str(frontend_dir / "css")), name="css")
-    app.mount("/js", StaticFiles(directory=str(frontend_dir / "js")), name="js")
-    app.mount("/assets", StaticFiles(directory=str(frontend_dir / "assets")), name="assets")
+    css_dir = frontend_dir / "css"
+    if css_dir.exists():
+        app.mount("/css", StaticFiles(directory=str(css_dir)), name="css")
+    js_dir = frontend_dir / "js"
+    if js_dir.exists():
+        app.mount("/js", StaticFiles(directory=str(js_dir)), name="js")
+    assets_dir = frontend_dir / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+    def _serve_page(name: str):
+        target = frontend_dir / f"{name}.html"
+        if target.is_file() and target.exists():
+            return FileResponse(target)
+        index_file = frontend_dir / "index.html"
+        if index_file.is_file() and index_file.exists():
+            return FileResponse(index_file)
+        return JSONResponse({
+            "app": "GreenMate AI",
+            "status": "online",
+            "message": "Backend API Ready",
+            "health": "/api/health"
+        })
 
     # Serve HTML pages directly
     @app.get("/", tags=["Frontend"])
     @app.get("/index", tags=["Frontend"])
     @app.get("/index.html", tags=["Frontend"])
     def serve_home():
-        return FileResponse(frontend_dir / "index.html")
+        return _serve_page("index")
 
     @app.get("/favicon.ico")
     def serve_favicon():
         fav = frontend_dir / "assets" / "favicon.ico"
         if fav.exists():
             return FileResponse(fav)
-        return FileResponse(frontend_dir / "index.html")
+        return _serve_page("index")
 
     @app.get("/{page_name}.html", tags=["Frontend"])
     def serve_any_html(page_name: str):
-        target = frontend_dir / f"{page_name}.html"
-        if target.exists():
-            return FileResponse(target)
-        return FileResponse(frontend_dir / "index.html")
+        return _serve_page(page_name)
 
     @app.get("/explore", tags=["Frontend"])
     def serve_explore():
-        return FileResponse(frontend_dir / "explore.html")
+        return _serve_page("explore")
 
     @app.get("/plant-details", tags=["Frontend"])
     def serve_details():
-        return FileResponse(frontend_dir / "plant-details.html")
+        return _serve_page("plant-details")
 
     @app.get("/ai-doctor", tags=["Frontend"])
     def serve_ai_doctor():
-        return FileResponse(frontend_dir / "ai-doctor.html")
+        return _serve_page("ai-doctor")
 
     @app.get("/my-garden", tags=["Frontend"])
     def serve_garden():
-        return FileResponse(frontend_dir / "my-garden.html")
+        return _serve_page("my-garden")
 
     @app.get("/guides", tags=["Frontend"])
     def serve_guides():
-        return FileResponse(frontend_dir / "guides.html")
+        return _serve_page("guides")
 
     @app.get("/track-order", tags=["Frontend"])
     def serve_track_order():
-        return FileResponse(frontend_dir / "track-order.html")
+        return _serve_page("track-order")
 
     @app.get("/admin", tags=["Frontend"])
     def serve_admin():
-        return FileResponse(frontend_dir / "admin.html")
+        return _serve_page("admin")
 
     @app.get("/login", tags=["Frontend"])
     def serve_login():
-        return FileResponse(frontend_dir / "login.html")
+        return _serve_page("login")
 
     @app.get("/register", tags=["Frontend"])
     def serve_register():
-        return FileResponse(frontend_dir / "register.html")
+        return _serve_page("register")
 
     @app.get("/profile", tags=["Frontend"])
     def serve_profile():
-        return FileResponse(frontend_dir / "profile.html")
+        return _serve_page("profile")
 
     # Comprehensive Wildcard SPA Route (prevents any frontend 404 Not Found error)
     @app.get("/{full_path:path}", tags=["Frontend"])
@@ -167,7 +184,9 @@ if frontend_dir.exists():
             return FileResponse(html_file)
 
         # 3. Fallback to index.html
-        return FileResponse(frontend_dir / "index.html")
+        if (frontend_dir / "index.html").exists():
+            return FileResponse(frontend_dir / "index.html")
+        return JSONResponse({"app": "GreenMate AI", "status": "online", "message": "Backend API Ready"})
 
 # Global 404 Exception Handler for FastAPI / Starlette
 @app.exception_handler(StarletteHTTPException)
