@@ -87,56 +87,62 @@ if frontend_dir.exists():
 
     # Serve HTML pages directly
     @app.get("/", tags=["Frontend"])
+    @app.get("/index", tags=["Frontend"])
+    @app.get("/index.html", tags=["Frontend"])
     def serve_home():
         return FileResponse(frontend_dir / "index.html")
 
+    @app.get("/favicon.ico")
+    def serve_favicon():
+        fav = frontend_dir / "assets" / "favicon.ico"
+        if fav.exists():
+            return FileResponse(fav)
+        return FileResponse(frontend_dir / "index.html")
+
+    @app.get("/{page_name}.html", tags=["Frontend"])
+    def serve_any_html(page_name: str):
+        target = frontend_dir / f"{page_name}.html"
+        if target.exists():
+            return FileResponse(target)
+        return FileResponse(frontend_dir / "index.html")
+
     @app.get("/explore", tags=["Frontend"])
-    @app.get("/explore.html", tags=["Frontend"])
     def serve_explore():
         return FileResponse(frontend_dir / "explore.html")
 
     @app.get("/plant-details", tags=["Frontend"])
-    @app.get("/plant-details.html", tags=["Frontend"])
     def serve_details():
         return FileResponse(frontend_dir / "plant-details.html")
 
     @app.get("/ai-doctor", tags=["Frontend"])
-    @app.get("/ai-doctor.html", tags=["Frontend"])
     def serve_ai_doctor():
         return FileResponse(frontend_dir / "ai-doctor.html")
 
     @app.get("/my-garden", tags=["Frontend"])
-    @app.get("/my-garden.html", tags=["Frontend"])
     def serve_garden():
         return FileResponse(frontend_dir / "my-garden.html")
 
     @app.get("/guides", tags=["Frontend"])
-    @app.get("/guides.html", tags=["Frontend"])
     def serve_guides():
         return FileResponse(frontend_dir / "guides.html")
 
     @app.get("/track-order", tags=["Frontend"])
-    @app.get("/track-order.html", tags=["Frontend"])
     def serve_track_order():
         return FileResponse(frontend_dir / "track-order.html")
 
     @app.get("/admin", tags=["Frontend"])
-    @app.get("/admin.html", tags=["Frontend"])
     def serve_admin():
         return FileResponse(frontend_dir / "admin.html")
 
     @app.get("/login", tags=["Frontend"])
-    @app.get("/login.html", tags=["Frontend"])
     def serve_login():
         return FileResponse(frontend_dir / "login.html")
 
     @app.get("/register", tags=["Frontend"])
-    @app.get("/register.html", tags=["Frontend"])
     def serve_register():
         return FileResponse(frontend_dir / "register.html")
 
     @app.get("/profile", tags=["Frontend"])
-    @app.get("/profile.html", tags=["Frontend"])
     def serve_profile():
         return FileResponse(frontend_dir / "profile.html")
 
