@@ -1,0 +1,660 @@
+/* ========================================================
+   GreenMate AI - Mobile-First Responsive Stylesheet
+   Transforms the web platform into an authentic Native App View on mobile phones.
+   ======================================================== */
+
+/* 1440px and above: Ultra-wide / Large Desktop */
+@media (min-width: 1440px) {
+  :root {
+    --container-max: 1360px;
+  }
+  .hero-title {
+    font-size: 3.8rem;
+  }
+  .plants-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* 1024px to 1439px: Standard Desktop & Large Tablets (Landscape) */
+@media (max-width: 1200px) {
+  .plants-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .categories-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .guides-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .footer-top-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+  .footer-col-subscribe {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 1024px) {
+  .nav-links {
+    gap: 20px;
+  }
+  .hero-title {
+    font-size: 2.8rem;
+  }
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .garden-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .disease-banner-card {
+    padding: 36px 32px;
+  }
+}
+
+/* ========================================================
+   MOBILE APP EXPERIENCE (< 768px: Mobile Phones & Phablets)
+   ======================================================== */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 74px !important; /* Space for Mobile Bottom Nav dock */
+    overflow-x: hidden !important;
+  }
+
+  .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* 1. HIDE CLUTTERED DESKTOP TOP BAR ON PHONE */
+  .top-bar {
+    display: none !important;
+  }
+
+  /* 2. SLIM NATIVE APP HEADER */
+  .main-header {
+    padding: 10px 0 !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    border-bottom: 1px solid rgba(19, 62, 41, 0.08) !important;
+  }
+
+  .main-header-inner {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+  }
+
+  .brand-logo {
+    font-size: 1.3rem !important;
+    gap: 8px !important;
+  }
+
+  .brand-logo svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .search-container {
+    order: 3 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 4px !important;
+  }
+
+  .search-form {
+    height: 40px !important;
+    border-radius: 20px !important;
+    background: #f1f5f3 !important;
+    border: 1px solid #e2ece6 !important;
+    padding: 0 12px !important;
+  }
+
+  .search-input {
+    font-size: 0.825rem !important;
+  }
+
+  .btn-search {
+    padding: 6px 14px !important;
+    font-size: 0.775rem !important;
+    border-radius: 16px !important;
+  }
+
+  .mobile-nav-toggle {
+    display: flex !important;
+    width: 28px !important;
+    height: 20px !important;
+  }
+
+  /* 3. SLIDE-DOWN DRAWER MENU */
+  .nav-bar {
+    display: none;
+    position: fixed !important;
+    top: 56px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 64px !important;
+    background: #ffffff !important;
+    z-index: 999 !important;
+    overflow-y: auto !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+    border-top: 1px solid var(--border-light) !important;
+  }
+
+  .nav-bar.active {
+    display: block !important;
+    animation: fadeInDrawer 0.25s ease !important;
+  }
+
+  @keyframes fadeInDrawer {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-links {
+    flex-direction: column !important;
+    height: auto !important;
+    padding: 20px 24px !important;
+    gap: 6px !important;
+    align-items: stretch !important;
+  }
+
+  .nav-item {
+    width: 100% !important;
+  }
+
+  .nav-item a {
+    height: 46px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    padding: 0 14px !important;
+    border-radius: 12px !important;
+    color: var(--primary-forest) !important;
+    background: #f8faf8 !important;
+  }
+
+  .nav-item.active a {
+    background: var(--mint-bg) !important;
+    color: var(--primary-emerald) !important;
+    border-left: 4px solid var(--primary-emerald) !important;
+  }
+
+  /* 4. HERO SECTION MOBILE CARD OPTIMIZATION */
+  .hero-section {
+    padding: 24px 0 20px !important;
+    background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%) !important;
+  }
+
+  .hero-inner {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    gap: 20px !important;
+  }
+
+  .hero-pill-badge {
+    margin: 0 auto 10px !important;
+    font-size: 0.725rem !important;
+    padding: 5px 12px !important;
+  }
+
+  .hero-title {
+    font-size: 2rem !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.6px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .hero-description {
+    font-size: 0.875rem !important;
+    margin: 0 auto 18px !important;
+    max-width: 90% !important;
+    line-height: 1.45 !important;
+  }
+
+  .hero-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    justify-content: center !important;
+    margin-bottom: 16px !important;
+  }
+
+  .btn-primary-pill, .btn-outline-pill {
+    padding: 11px 16px !important;
+    font-size: 0.85rem !important;
+    width: 100% !important;
+    justify-content: center !important;
+    border-radius: 24px !important;
+  }
+
+  /* MOBILE SCANNER VIEWFINDER CARD (Instead of giant fake phone inside real phone) */
+  .hero-media {
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 330px !important;
+  }
+
+  .phone-mockup {
+    width: 100% !important;
+    max-width: 320px !important;
+    height: 240px !important;
+    border-radius: 20px !important;
+    border: 3px solid #133e29 !important;
+    margin: 0 auto !important;
+    box-shadow: 0 14px 30px rgba(19, 62, 41, 0.2) !important;
+  }
+
+  .phone-notch {
+    display: none !important;
+  }
+
+  .phone-screen {
+    padding: 12px !important;
+    border-radius: 17px !important;
+  }
+
+  .scanner-tag {
+    bottom: 12px !important;
+    left: 12px !important;
+    right: 12px !important;
+    padding: 8px 12px !important;
+  }
+
+  .scanner-tag h5 {
+    font-size: 0.85rem !important;
+  }
+
+  /* 5. FEATURES CARDS (Swipeable or Compact Stack) */
+  .features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .feature-card {
+    padding: 18px 16px !important;
+    border-radius: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+
+  .feature-card h3 {
+    font-size: 1.05rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .feature-card p {
+    font-size: 0.8rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* 6. POPULAR CATEGORIES: EDGE-TO-EDGE HORIZONTAL SWIPEABLE APP RAIL */
+  .categories-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 10px !important;
+    padding: 8px 16px 14px !important;
+    margin: 0 -16px !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  .categories-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .category-card {
+    flex: 0 0 94px !important;
+    scroll-snap-align: start !important;
+    padding: 12px 6px !important;
+    border-radius: 16px !important;
+    background: #f8faf8 !important;
+    border: 1px solid var(--border-light) !important;
+    text-align: center !important;
+  }
+
+  .category-card-img-wrap {
+    width: 62px !important;
+    height: 62px !important;
+    margin: 0 auto 8px !important;
+    border-radius: 50% !important;
+  }
+
+  .category-card h4 {
+    font-size: 0.775rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* CATEGORY PILL FILTER RAIL */
+  .category-pill-rail {
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    padding: 4px 0 8px !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  .category-pill-rail::-webkit-scrollbar {
+    display: none !important;
+  }
+  .category-pill-btn {
+    flex-shrink: 0 !important;
+    padding: 7px 14px !important;
+    font-size: 0.8rem !important;
+    border-radius: 20px !important;
+  }
+
+  /* 7. FEATURED PLANTS: CRISP 2-COLUMN MOBILE APP CATALOG */
+  .plants-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .plant-card {
+    padding: 10px !important;
+    border-radius: 18px !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .plant-card-img-wrap {
+    height: 135px !important;
+    border-radius: 12px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .plant-name {
+    font-size: 0.95rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .plant-scientific {
+    font-size: 0.7rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  .plant-meta-row {
+    font-size: 0.725rem !important;
+    gap: 4px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .plant-price {
+    font-size: 1.15rem !important;
+    margin: 6px 0 !important;
+  }
+
+  .btn-card-buy {
+    font-size: 0.775rem !important;
+    padding: 8px 10px !important;
+    border-radius: 18px !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* 8. DISEASE BANNER MOBILE CARD */
+  .disease-banner-card {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    padding: 24px 16px !important;
+    border-radius: 20px !important;
+    gap: 16px !important;
+  }
+
+  .disease-banner-title {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .disease-banner-desc {
+    font-size: 0.825rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  .disease-banner-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .btn-disease-upload, .btn-disease-analyze {
+    padding: 10px 14px !important;
+    font-size: 0.8rem !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .disease-diagnostic-card {
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 10px !important;
+    padding: 14px !important;
+  }
+
+  /* 9. SMART GARDEN & GUIDES GRIDS */
+  .garden-cards-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .garden-nav-card {
+    padding: 14px 12px !important;
+    border-radius: 16px !important;
+  }
+
+  .garden-card-icon {
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 1.2rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .garden-nav-card h4 {
+    font-size: 0.85rem !important;
+  }
+
+  .garden-nav-card p {
+    font-size: 0.725rem !important;
+  }
+
+  .guides-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* 10. PAYTM CHECKOUT MODAL: NATIVE MOBILE BOTTOM SHEET */
+  .modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    z-index: 10500 !important; /* Above mobile-bottom-nav (9999) */
+  }
+
+  .modal-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    border-radius: 24px 24px 0 0 !important;
+    max-height: 92vh !important;
+    height: auto !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    animation: sheetSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35) !important;
+    margin: 0 !important;
+  }
+
+  @keyframes sheetSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .paytm-header-bar {
+    padding: 14px 18px !important;
+    border-radius: 24px 24px 0 0 !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .modal-body {
+    padding: 16px 16px calc(50px + env(safe-area-inset-bottom, 24px)) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    touch-action: pan-y !important;
+    flex: 1 1 auto !important;
+    max-height: calc(92vh - 60px) !important;
+  }
+
+  .paytm-method-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .paytm-method-option {
+    padding: 10px !important;
+  }
+
+  .paytm-method-icon {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.95rem !important;
+  }
+
+  .btn-paytm-pay {
+    padding: 14px 20px !important;
+    font-size: 1rem !important;
+    margin-top: 10px !important;
+  }
+
+  /* 11. FOOTER COMPACT */
+  footer {
+    padding: 30px 0 20px !important;
+  }
+
+  .footer-top-grid {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  .footer-col-subscribe {
+    grid-column: span 1 !important;
+  }
+
+  .subscribe-form {
+    flex-direction: column !important;
+  }
+
+  .subscribe-input {
+    width: 100% !important;
+  }
+
+  .btn-subscribe {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* 12. FLOATING CHATBOT ADJUSTMENT FOR MOBILE */
+  .chatbot-wrapper {
+    bottom: 80px !important;
+    right: 14px !important;
+  }
+
+  .chatbot-trigger-btn {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .chatbot-panel {
+    width: calc(100vw - 20px) !important;
+    right: 10px !important;
+    bottom: 74px !important;
+    height: 480px !important;
+    border-radius: 20px !important;
+  }
+
+  /* 13. ADMIN HUB & PEOPLE DIRECTORY ON MOBILE */
+  .admin-container {
+    padding: 16px 12px 80px !important;
+  }
+
+  .db-status-bar {
+    padding: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .kpi-card {
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .kpi-val {
+    font-size: 1.4rem !important;
+  }
+
+  .kpi-lbl {
+    font-size: 0.7rem !important;
+  }
+
+  .nav-tabs-custom {
+    gap: 6px !important;
+  }
+
+  .tab-btn {
+    padding: 9px 14px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* 375px: Standard Mobile (iPhone 13/14/15) */
+@media (max-width: 375px) {
+  .hero-title {
+    font-size: 1.8rem !important;
+  }
+  .plant-card-img-wrap {
+    height: 120px !important;
+  }
+}
+
+/* 320px: Ultra-Compact Mobile */
+@media (max-width: 320px) {
+  .hero-title {
+    font-size: 1.6rem !important;
+  }
+  .plants-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-actions {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: greenmate-ai
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: MONGO_URI
+        value: mongodb+srv://raagaavan157_db_user:PZ1QukOES77zOtDg@cluster157.siznj5z.mongodb.net/greenmate_db?retryWrites=true&w=majority
+      - key: DB_NAME
+        value: greenmate_db
+      - key: JWT_SECRET
+        value: greenmate_super_secret_jwt_key_2026_botanical
+      - key: ENVIRONMENT
+        value: production

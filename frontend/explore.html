@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Plants - GreenMate AI</title>
+  <link rel="stylesheet" href="/css/style.css?v=2.2">
+  <link rel="stylesheet" href="/css/components.css?v=2.3">
+  <link rel="stylesheet" href="/css/responsive.css?v=2.3">
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header>
+    <div class="top-bar">
+      <div class="container top-bar-inner">
+        <div class="top-bar-left">
+          <a href="/guides.html" class="top-bar-link">Help</a>
+          <a href="/track-order.html" class="top-bar-link">Track Order</a>
+          <a href="/guides.html" class="top-bar-link">Plant Care Guide</a>
+          <a href="/#about-section" class="top-bar-link">About Us</a>
+        </div>
+        <div class="top-bar-right">
+          <span class="tagline-badge">🌱 Grow Smarter. Live Greener.</span>
+          <a href="/profile.html" class="top-action-link">
+            <span>Wishlist</span>
+            <span id="wishlist-badge" class="badge-count">0</span>
+          </a>
+          <a href="/my-garden.html" class="top-action-link">
+            <span>My Garden</span>
+            <span id="garden-badge" class="badge-count">0</span>
+          </a>
+          <div id="header-auth-container">
+            <a href="/login.html" class="top-action-link">Login / Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN BRAND & SEARCH ROW -->
+    <div class="main-header">
+      <div class="container main-header-inner">
+        <a href="/" class="brand-logo">
+          <svg class="logo-leaf" viewBox="0 0 32 32" fill="none">
+            <path d="M6 26C6 26 8 16 18 10C28 4 28 4 28 4C28 4 28 14 22 20C16 26 6 26 6 26Z" fill="#133e29"/>
+            <path d="M11 23C15 19 20 15 28 4" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span>GreenMate <span class="ai-suffix">AI</span></span>
+        </a>
+
+        <div class="search-container">
+          <form class="search-form" id="catalog-search-form">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="catalog-search-input" class="search-input" placeholder="Search plants, care guides, or categories...">
+            <button type="submit" class="btn-search">Search</button>
+          </form>
+        </div>
+
+        <div class="mobile-nav-toggle">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN NAV BAR -->
+    <nav class="nav-bar">
+      <div class="container">
+        <ul class="nav-links">
+          <li class="nav-item"><a href="/">Home</a></li>
+          <li class="nav-item active"><a href="/explore.html">Explore Plants</a></li>
+          <li class="nav-item"><a href="/ai-doctor.html">AI Plant Doctor</a></li>
+          <li class="nav-item"><a href="/my-garden.html">My Garden</a></li>
+          <li class="nav-item"><a href="/guides.html">Plant Care</a></li>
+          <li class="nav-item"><a href="/track-order.html">Track Order</a></li>
+          <li class="nav-item"><a href="/#about-section">About</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- EXPLORE BANNER -->
+  <section style="background:var(--mint-bg); padding:40px 0 30px; border-bottom:1px solid var(--mint-border);">
+    <div class="container">
+      <div style="max-width:680px;">
+        <span style="display:inline-block; font-size:0.8rem; font-weight:800; text-transform:uppercase; color:var(--primary-emerald); background:#ffffff; padding:4px 12px; border-radius:var(--radius-full); margin-bottom:10px;">
+          Botanical Catalog
+        </span>
+        <h1 style="font-size:2.4rem; font-weight:800; color:var(--primary-forest); margin-bottom:8px;">Discover & Explore Plants</h1>
+        <p style="color:var(--text-muted); font-size:1.05rem;">
+          Browse our extensive botanical database with AI care intelligence, light requirements, and watering needs.
+        </p>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="category-pill-rail" style="display:flex; gap:10px; margin-top:20px;">
+        <button class="category-pill-btn active" data-cat="all">All Plants</button>
+        <button class="category-pill-btn" data-cat="Indoor Plants">Indoor Plants</button>
+        <button class="category-pill-btn" data-cat="Outdoor Plants">Outdoor Plants</button>
+        <button class="category-pill-btn" data-cat="Flowers">Flowers</button>
+        <button class="category-pill-btn" data-cat="Succulents">Succulents</button>
+        <button class="category-pill-btn" data-cat="Herbs">Herbs</button>
+        <button class="category-pill-btn" data-cat="Medicinal Plants">Medicinal Plants</button>
+        <button class="category-pill-btn" data-cat="Trees">Trees</button>
+        <button class="category-pill-btn" data-cat="Vegetable Plants">Vegetable Plants</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANTS CATALOG GRID -->
+  <section style="padding:40px 0 80px;">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:28px;">
+        <span id="catalog-count-badge" style="font-weight:700; color:var(--primary-forest); font-size:1.05rem;">Loading catalog...</span>
+        <div style="display:flex; gap:12px;">
+          <select id="filter-difficulty" class="form-control" style="width:auto; padding:6px 14px; font-size:0.85rem;">
+            <option value="all">Any Difficulty</option>
+            <option value="Easy">Easy</option>
+            <option value="Moderate">Moderate</option>
+          </select>
+          <select id="filter-sunlight" class="form-control" style="width:auto; padding:6px 14px; font-size:0.85rem;">
+            <option value="all">Any Sunlight</option>
+            <option value="Low Light">Low Light</option>
+            <option value="Medium Light">Medium Light</option>
+            <option value="Full Sun">Full Sun</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="explore-plants-grid" class="plants-grid"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom-bar" style="border:none; padding:0;">
+        <p>© 2026 GreenMate AI. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING CHATBOT -->
+  <div class="chatbot-wrapper">
+    <div id="chatbot-panel" class="chatbot-panel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="chat-bot-avatar">🌿</div>
+          <div class="chat-title-wrap">
+            <h4>GreenMate AI</h4>
+            <div class="chat-status-indicator"><span class="status-dot-pulse"></span> Online</div>
+          </div>
+        </div>
+        <button id="chat-close-btn" class="btn-chat-close">✕</button>
+      </div>
+      <div id="chat-body" class="chat-body">
+        <div class="chat-bubble bot">Hi! Need assistance picking the best plant for your home? Ask me!</div>
+      </div>
+      <div class="chat-footer">
+        <form id="chat-input-form" class="chat-input-form">
+          <input type="text" id="chat-user-input" class="chat-input" placeholder="Type your message..." autocomplete="off">
+          <button type="submit" class="btn-chat-send">→</button>
+        </form>
+      </div>
+    </div>
+    <button id="chatbot-trigger" class="chatbot-trigger-btn">🌿</button>
+  </div>
+
+  <style>
+    .category-pill-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary-forest);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .category-pill-btn:hover, .category-pill-btn.active {
+      background: var(--primary-forest);
+      color: #ffffff;
+      border-color: var(--primary-forest);
+    }
+  </style>
+
+  <!-- PAYTM CHECKOUT MODAL -->
+  <div id="paytm-checkout-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:540px; border-radius:24px;">
+      <div class="paytm-header-bar">
+        <div class="paytm-logo-badge">Pay<span>tm</span> Payments Bank</div>
+        <div class="paytm-secure-tag">🔒 100% Safe & Verified</div>
+        <button onclick="PaytmCheckout.close()" class="modal-close-btn" style="color:#ffffff;">✕</button>
+      </div>
+
+      <div id="paytm-checkout-form-view" class="modal-body" style="padding:24px;">
+        <div style="display:flex; align-items:center; gap:16px; background:var(--mint-bg); padding:12px 16px; border-radius:14px; border:1px solid var(--mint-border); margin-bottom:20px;">
+          <img id="paytm-plant-img" src="" style="width:54px; height:54px; border-radius:10px; object-fit:cover;" alt="Plant">
+          <div style="flex:1;">
+            <h4 id="paytm-plant-name" style="font-size:1.05rem; font-weight:800; color:var(--primary-forest);">Plant Name</h4>
+            <div id="paytm-unit-price" style="font-size:0.85rem; color:#5e7367;">₹399</div>
+          </div>
+          <div style="display:flex; align-items:center; border:1.5px solid var(--border-light); border-radius:var(--radius-full); background:#ffffff;">
+            <button type="button" onclick="PaytmCheckout.changeQty(-1)" style="padding:4px 10px; font-weight:800; color:var(--primary-forest);">-</button>
+            <input type="text" id="paytm-qty-input" value="1" readonly style="width:28px; text-align:center; border:none; font-weight:700; font-size:0.85rem;">
+            <button type="button" onclick="PaytmCheckout.changeQty(1)" style="padding:4px 10px; font-weight:800; color:var(--primary-forest);">+</button>
+          </div>
+        </div>
+
+        <h5 style="font-size:0.85rem; font-weight:800; color:#002e6e; margin-bottom:10px; text-transform:uppercase;">Select Paytm Payment Method</h5>
+        <div class="paytm-method-grid">
+          <div class="paytm-method-option active" onclick="PaytmCheckout.selectPaymentMode('PAYTM_UPI', this)">
+            <div class="paytm-method-icon">⚡</div>
+            <div class="paytm-method-info"><h5>Paytm UPI</h5><p>Instant UPI PIN</p></div>
+          </div>
+          <div class="paytm-method-option" onclick="PaytmCheckout.selectPaymentMode('PAYTM_QR', this)">
+            <div class="paytm-method-icon">📲</div>
+            <div class="paytm-method-info"><h5>Paytm QR Code</h5><p>Scan & Pay</p></div>
+          </div>
+          <div class="paytm-method-option" onclick="PaytmCheckout.selectPaymentMode('PAYTM_WALLET', this)">
+            <div class="paytm-method-icon">💼</div>
+            <div class="paytm-method-info"><h5>Paytm Wallet</h5><p>One-click Balance</p></div>
+          </div>
+          <div class="paytm-method-option" onclick="PaytmCheckout.selectPaymentMode('PAYTM_CARD', this)">
+            <div class="paytm-method-icon">💳</div>
+            <div class="paytm-method-info"><h5>Cards / NetBanking</h5><p>All Major Banks</p></div>
+          </div>
+        </div>
+
+        <div id="paytm-qr-display" style="display:none; text-align:center; padding:12px; background:#f8fafc; border-radius:14px; margin-bottom:18px;">
+          <div id="paytm-qr-box"></div>
+        </div>
+
+        <div id="paytm-upi-display" style="margin-bottom:18px;">
+          <label class="form-label" style="font-size:0.775rem;">Paytm UPI ID / VPA</label>
+          <input type="text" id="paytm-vpa-input" class="form-control" placeholder="mobilenumber@paytm" value="9876543210@paytm">
+        </div>
+
+        <h5 style="font-size:0.85rem; font-weight:800; color:var(--primary-forest); margin-bottom:10px; text-transform:uppercase;">Delivery Destination</h5>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+          <input type="text" id="paytm-ship-name" class="form-control" placeholder="Full Name" required>
+          <input type="tel" id="paytm-ship-phone" class="form-control" placeholder="Mobile Number" required>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+          <input type="text" id="paytm-ship-address" class="form-control" placeholder="Flat, Street, Landmark" required>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:18px;">
+          <input type="text" id="paytm-ship-city" class="form-control" placeholder="City" required>
+          <input type="text" id="paytm-ship-pincode" class="form-control" placeholder="Pincode" required>
+        </div>
+
+        <div style="background:#f8faf8; border-radius:12px; padding:12px 16px; font-size:0.825rem; color:#5e7367; margin-bottom:20px; display:flex; flex-direction:column; gap:6px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span>Plant Subtotal</span><span id="paytm-subtotal">₹399</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>Eco-Friendly Plant Packaging</span><span style="color:#16a34a; font-weight:700;">FREE</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>Climate-Controlled Delivery</span><span style="color:#16a34a; font-weight:700;">FREE</span>
+          </div>
+          <div style="border-top:1px solid #e2e8f0; padding-top:6px; display:flex; justify-content:space-between; font-weight:800; color:#002e6e; font-size:1rem;">
+            <span>Total Payable via Paytm</span><span id="paytm-grand-total">₹399</span>
+          </div>
+        </div>
+
+        <button type="button" onclick="PaytmCheckout.submitPayment(event)" class="btn-paytm-pay">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#00b9f5"><rect width="24" height="24" rx="4"/></svg>
+          <span id="btn-paytm-submit-label">Pay with Paytm</span>
+        </button>
+      </div>
+
+      <div id="paytm-processing-view" style="display:none; text-align:center; padding:50px 24px;">
+        <div class="spinner" style="width:44px; height:44px; border-width:3px; border-color:rgba(0, 46, 110, 0.2); border-top-color:#00b9f5; margin-bottom:18px;"></div>
+        <h3 style="font-size:1.3rem; font-weight:800; color:#002e6e;">Connecting with Paytm Gateway...</h3>
+        <p style="color:#5e7367; font-size:0.85rem; margin-top:6px;">Authenticating secure transaction token and merchant checksum.</p>
+      </div>
+
+      <div id="paytm-success-view" style="display:none; text-align:center; padding:44px 28px;">
+        <div style="width:68px; height:68px; border-radius:50%; background:#dcfce7; color:#16a34a; font-size:2rem; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">✓</div>
+        <span style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:#002e6e; background:#e6f7ff; padding:4px 12px; border-radius:12px;">Paytm Payment Verified</span>
+        <h2 style="font-size:1.6rem; font-weight:800; color:var(--primary-forest); margin-top:8px;">Order Confirmed! 🌿</h2>
+        <p style="color:#5e7367; font-size:0.9rem; margin-top:4px;">Your order for <strong id="paytm-success-plant-name">Plant</strong> has been booked and transferred to our nursery.</p>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:16px; margin:20px 0; text-align:left; font-size:0.825rem; display:flex; flex-direction:column; gap:6px;">
+          <div style="display:flex; justify-content:space-between;"><span>Order ID:</span><strong id="paytm-success-order-id" style="color:#002e6e;"></strong></div>
+          <div style="display:flex; justify-content:space-between;"><span>Paytm Ref No:</span><strong id="paytm-success-txn-id" style="color:#002e6e;"></strong></div>
+          <div style="display:flex; justify-content:space-between;"><span>Amount Paid:</span><strong id="paytm-success-amount" style="color:#16a34a;"></strong></div>
+          <div style="display:flex; justify-content:space-between;"><span>Estimated Arrival:</span><strong id="paytm-success-delivery-date" style="color:var(--primary-forest);"></strong></div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <a id="paytm-track-btn" href="/track-order.html" class="btn-primary-pill" style="flex:1; justify-content:center;">📦 Track Order Live</a>
+          <button onclick="PaytmCheckout.close()" class="btn-secondary" style="border-radius:var(--radius-full);">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NATIVE MOBILE APP BOTTOM NAVIGATION DOCK -->
+  <nav class="mobile-bottom-nav">
+    <a href="/" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </a>
+    <a href="/explore.html" class="mobile-bottom-nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Catalog</span>
+    </a>
+    <a href="/ai-doctor.html" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span>AI Doctor</span>
+    </a>
+    <a href="/my-garden.html" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22v-9"/><path d="M9 15c-3 0-5-2-5-5 3 0 5 2 5 5z"/><path d="M15 11c3 0 5-2 5-5-3 0-5 2-5 5z"/><path d="M4 22h16"/></svg>
+      <span>My Garden</span>
+    </a>
+    <a href="/track-order.html" class="mobile-bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16v-2"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      <span>Track Order</span>
+    </a>
+  </nav>
+
+  <!-- JavaScript Modules -->
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/plants.js"></script>
+  <script src="/js/garden.js"></script>
+  <script src="/js/ai-doctor.js"></script>
+  <script src="/js/chatbot.js"></script>
+  <script src="/js/paytm.js?v=2.3"></script>
+  <script src="/js/app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Plants.loadExploreCatalog();
+
+      // Category filter buttons
+      document.querySelectorAll('.category-pill-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.category-pill-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const cat = btn.getAttribute('data-cat');
+          Plants.activeCategory = cat;
+          loadFiltered();
+        });
+      });
+
+      // Difficulty & Sunlight Selects
+      document.getElementById('filter-difficulty').addEventListener('change', loadFiltered);
+      document.getElementById('filter-sunlight').addEventListener('change', loadFiltered);
+
+      // Search Form
+      document.getElementById('catalog-search-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        loadFiltered();
+      });
+
+      function loadFiltered() {
+        const search = document.getElementById('catalog-search-input').value.trim();
+        const diff = document.getElementById('filter-difficulty').value;
+        const sun = document.getElementById('filter-sunlight').value;
+        
+        API.getPlants({
+          category: Plants.activeCategory,
+          search: search,
+          difficulty: diff,
+          sunlight: sun
+        }).then(plants => {
+          Plants.currentPlants = plants;
+          document.getElementById('catalog-count-badge').textContent = `${plants.length} plants found`;
+          const container = document.getElementById('explore-plants-grid');
+          if (plants.length === 0) {
+            container.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:30px;">No plants found matching the selected filters.</p>';
+          } else {
+            container.innerHTML = plants.map(p => Plants.renderCard(p)).join('');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

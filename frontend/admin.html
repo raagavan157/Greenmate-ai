@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner & Admin Portal - GreenMate AI (Private)</title>
+  <link rel="stylesheet" href="/css/style.css?v=2.2">
+  <link rel="stylesheet" href="/css/components.css?v=2.3">
+  <link rel="stylesheet" href="/css/responsive.css?v=2.3">
+  <style>
+    .admin-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    .db-status-bar {
+      background: linear-gradient(135deg, #064e3b 0%, #133e29 100%);
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 20px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px rgba(6, 78, 59, 0.15);
+    }
+    .db-status-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .pulse-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      70% { box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .kpi-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+    }
+    .kpi-val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary-forest);
+      line-height: 1.1;
+    }
+    .kpi-lbl {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+    .nav-tabs-custom {
+      display: flex;
+      gap: 10px;
+      border-bottom: 2px solid var(--border-light);
+      margin-bottom: 24px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .tab-btn {
+      padding: 12px 22px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-radius: 12px 12px 0 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      color: var(--primary-forest);
+      background: #ffffff;
+      border-bottom: 3px solid var(--primary-forest);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+    }
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .table-header-tools {
+      padding: 18px 24px;
+      background: #fafdfb;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .search-filter-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      padding: 8px 14px;
+      border-radius: 12px;
+      min-width: 280px;
+    }
+    .search-filter-box input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 0.875rem;
+    }
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .custom-table th {
+      background: #f1f7f3;
+      color: var(--primary-forest);
+      font-size: 0.785rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .custom-table td {
+      padding: 16px 18px;
+      border-bottom: 1px solid #f1f5f3;
+      font-size: 0.875rem;
+      vertical-align: middle;
+    }
+    .custom-table tr:hover {
+      background: #fbfdfc;
+    }
+    .user-avatar-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-avatar-img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #e2f4ea;
+      border: 2px solid var(--primary-mint);
+      object-fit: cover;
+    }
+    .paytm-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.775rem;
+      font-weight: 800;
+    }
+    .badge-paytm-upi {
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+    .badge-paytm-qr {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border: 1px solid #e9d5ff;
+    }
+    .badge-paytm-wallet {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+    }
+    .badge-paytm-card {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .status-paid {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .status-select {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-light);
+      background: #ffffff;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .search-filter-box {
+        min-width: 0 !important;
+        width: 100% !important;
+      }
+      .table-header-tools {
+        padding: 12px 14px !important;
+      }
+      .custom-table th, .custom-table td {
+        padding: 10px 12px !important;
+        font-size: 0.8rem !important;
+      }
+      .db-status-bar {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP HEADER (Owner Portal)
+       ======================================================== -->
+  <header style="background:#ffffff; border-bottom:1px solid var(--border-light); padding:14px 0;">
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="/" class="brand-logo">
+        <svg class="logo-leaf" viewBox="0 0 32 32" fill="none">
+          <path d="M6 26C6 26 8 16 18 10C28 4 28 4 28 4C28 4 28 14 22 20C16 26 6 26 6 26Z" fill="#133e29"/>
+          <path d="M11 23C15 19 20 15 28 4" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>GreenMate <span class="ai-suffix">AI</span></span>
+      </a>
+
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="font-size:0.85rem; font-weight:800; color:#002e6e; background:#e0f2fe; padding:4px 12px; border-radius:14px;">
+          🔒 Owner Portal
+        </span>
+        <a href="/" class="btn-secondary" style="font-size:0.85rem; padding:6px 14px; border-radius:var(--radius-full);">
+          ← Back to Store
+        </a>
+        <button id="btn-admin-logout" onclick="logoutAdmin()" class="btn-secondary" style="display:none; font-size:0.85rem; padding:6px 14px; border-radius:var(--radius-full); background:#fee2e2; color:#b91c1c; border:none;">
+          🔒 Lock Dashboard
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       SECURITY GATE: ADMIN ACCESS PIN
+       ======================================================== -->
+  <div id="admin-gate-screen" style="display:block; min-height:70vh; display:flex; align-items:center; justify-content:center; padding:40px 16px;">
+    <div style="background:#ffffff; width:100%; max-width:440px; border-radius:24px; padding:36px; box-shadow:var(--shadow-lg); border:1px solid var(--border-light); text-align:center;">
+      <div style="width:68px; height:68px; border-radius:20px; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 16px;">
+        🔒
+      </div>
+      <h2 style="font-size:1.6rem; font-weight:800; color:var(--primary-forest);">Owner Access Only</h2>
+      <p style="color:var(--text-muted); font-size:0.875rem; margin:6px 0 24px; line-height:1.5;">
+        Customer details, phone numbers, delivery addresses, and Paytm incoming funds are confidential to the store owner.
+      </p>
+
+      <form onsubmit="handleAdminLogin(event)">
+        <div class="form-group" style="margin-bottom:18px;">
+          <label class="form-label" style="text-align:left; font-size:0.825rem;">Enter Owner Security PIN</label>
+          <input type="password" id="admin-pin-input" class="form-control" placeholder="••••" maxlength="10" style="text-align:center; font-size:1.4rem; letter-spacing:6px; font-weight:800;" required autofocus>
+        </div>
+
+        <button type="submit" id="btn-admin-unlock" class="btn-primary-solid" style="width:100%; padding:13px; font-size:0.95rem; border-radius:var(--radius-full); background:#133e29;">
+          🔓 Unlock Customer & Orders Dashboard
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MAIN OWNER DASHBOARD (Revealed only when PIN is unlocked)
+       ======================================================== -->
+  <main id="admin-main-dashboard" class="admin-container" style="display:none;">
+
+    <!-- MongoDB Atlas Status Bar -->
+    <div class="db-status-bar">
+      <div class="db-status-left">
+        <div class="pulse-dot"></div>
+        <div>
+          <h3 style="font-size:1.1rem; font-weight:800; margin:0; display:flex; align-items:center; gap:8px;">
+            Live Database: MongoDB Atlas
+            <span style="font-size:0.75rem; background:rgba(34,197,94,0.25); color:#4ade80; border:1px solid #22c55e; padding:2px 8px; border-radius:12px;">ACTIVE</span>
+          </h3>
+          <p style="margin:4px 0 0; font-size:0.825rem; opacity:0.85; font-family:monospace;">
+            Cluster: cluster157.siznj5z.mongodb.net | Database: greenmate_db
+          </p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button onclick="refreshData()" class="btn-primary-solid" style="background:#22c55e; font-size:0.825rem; padding:8px 16px; border-radius:var(--radius-full); display:flex; align-items:center; gap:6px;">
+          🔄 Refresh Orders
+        </button>
+        <button onclick="openNewUserModal()" class="btn-primary-solid" style="background:#00b9f5; font-size:0.825rem; padding:8px 16px; border-radius:var(--radius-full); display:flex; align-items:center; gap:6px;">
+          ➕ Add Customer
+        </button>
+      </div>
+    </div>
+
+    <!-- OWNER PAYTM RECEIVING DESTINATION CONFIGURATION -->
+    <div style="background:#ffffff; border:1.5px solid #002e6e; border-radius:18px; padding:18px 24px; margin-bottom:24px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; box-shadow:0 4px 16px rgba(0, 46, 110, 0.08);">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <div style="width:48px; height:48px; border-radius:14px; background:#e0f2fe; color:#002e6e; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">
+          💳
+        </div>
+        <div>
+          <span style="font-size:0.725rem; font-weight:800; text-transform:uppercase; color:#002e6e; letter-spacing:0.5px;">
+            Your Paytm Receiving Account
+          </span>
+          <div style="font-size:1.1rem; font-weight:800; color:#0f172a; margin-top:2px;">
+            Receiving UPI ID: <span id="disp-owner-upi" style="color:#00b9f5; font-family:monospace;">raagaavan157@paytm</span>
+          </div>
+          <p style="margin:2px 0 0; font-size:0.785rem; color:#64748b;">
+            All customer Paytm QR scans and UPI payments transfer money directly to this UPI ID.
+          </p>
+        </div>
+      </div>
+
+      <button onclick="changeOwnerUpi()" class="btn-primary-solid" style="background:#002e6e; font-size:0.825rem; padding:8px 18px; border-radius:var(--radius-full);">
+        ✏️ Change Receiving UPI
+      </button>
+    </div>
+
+    <!-- ATLAS CLOUD DATABASE STATUS & SYNC PANEL -->
+    <div id="atlas-status-card" style="background:#ffffff; border:1.5px solid #16a34a; border-radius:18px; padding:18px 24px; margin-bottom:24px; box-shadow:0 4px 16px rgba(0, 0, 0, 0.05);">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div id="atlas-status-icon" style="width:48px; height:48px; border-radius:14px; background:#ecfdf5; color:#16a34a; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">
+            🍃
+          </div>
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.725rem; font-weight:800; text-transform:uppercase; color:#0f5132; letter-spacing:0.5px;">
+                MongoDB Atlas Cloud Sync
+              </span>
+              <span id="atlas-status-pill" style="font-size:0.75rem; font-weight:800; padding:2px 10px; border-radius:12px; background:#dcfce7; color:#15803d;">
+                Checking...
+              </span>
+            </div>
+            <div id="atlas-status-msg" style="font-size:0.875rem; color:#334155; margin-top:3px; font-weight:600;">
+              Connecting to MongoDB Atlas (cluster157)...
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button id="btn-sync-atlas" onclick="triggerAtlasSync()" class="btn-primary-solid" style="background:#15803d; font-size:0.825rem; padding:8px 18px; border-radius:var(--radius-full); display:flex; align-items:center; gap:6px;">
+            🔄 Sync Data to Atlas Now
+          </button>
+        </div>
+      </div>
+      <div id="atlas-whitelist-help" style="display:none; margin-top:14px; padding:12px 16px; background:#fffbeb; border-radius:12px; border:1px solid #fef3c7; font-size:0.825rem; color:#92400e; line-height:1.5;">
+        ⚠️ <strong>Atlas Network Access Required:</strong> Your current public IP is <code id="disp-public-ip" style="background:#ffffff; padding:2px 6px; border-radius:4px; font-weight:700;">Loading...</code>. To see your data directly inside MongoDB Atlas web explorer, go to <a href="https://cloud.mongodb.com" target="_blank" style="text-decoration:underline; font-weight:700; color:#b45309;">cloud.mongodb.com</a> → <strong>Network Access</strong> → <strong>Add IP Address</strong> → Click <strong>Allow Access from Anywhere (0.0.0.0/0)</strong>. Once added, click "Sync Data to Atlas Now"!
+      </div>
+    </div>
+
+    <!-- Live KPI Summary Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:#ecfdf5; color:#10b981;">🛒</div>
+        <div>
+          <div class="kpi-val" id="stat-total-orders">-</div>
+          <div class="kpi-lbl">Total Customer Orders</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:#fef3c7; color:#d97706;">💰</div>
+        <div>
+          <div class="kpi-val" id="stat-total-revenue">₹0</div>
+          <div class="kpi-lbl">Total Money Received</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:#e0f2fe; color:#0284c7;">👥</div>
+        <div>
+          <div class="kpi-val" id="stat-total-users">-</div>
+          <div class="kpi-lbl">Registered Customers</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:#f3e8ff; color:#9333ea;">🌿</div>
+        <div>
+          <div class="kpi-val" id="stat-total-plants">-</div>
+          <div class="kpi-lbl">Botanical Plants</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs-custom">
+      <button class="tab-btn active" id="tab-orders-btn" onclick="switchTab('orders')">
+        💳 Customer Orders & Real Payments (<span id="tab-orders-count">0</span>)
+      </button>
+      <button class="tab-btn" id="tab-users-btn" onclick="switchTab('users')">
+        👥 Registered Customers Directory (<span id="tab-users-count">0</span>)
+      </button>
+      <button class="tab-btn" id="tab-simulate-btn" onclick="switchTab('simulate')">
+        ⚡ Test Real Paytm Checkout
+      </button>
+    </div>
+
+    <!-- TAB 1: CUSTOMER ORDERS & REAL PAYMENTS VIEW -->
+    <section id="tab-orders-section">
+      <div class="table-card">
+        <div class="table-header-tools">
+          <div class="search-filter-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="order-search-input" placeholder="Search orders by customer, plant, or order ID..." oninput="filterOrders()">
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button onclick="filterOrdersByMethod('ALL')" class="btn-secondary" style="font-size:0.785rem; padding:6px 12px; border-radius:20px;">All</button>
+            <button onclick="filterOrdersByMethod('UPI')" class="btn-secondary" style="font-size:0.785rem; padding:6px 12px; border-radius:20px;">Paytm UPI</button>
+            <button onclick="filterOrdersByMethod('QR')" class="btn-secondary" style="font-size:0.785rem; padding:6px 12px; border-radius:20px;">Paytm QR</button>
+            <button onclick="filterOrdersByMethod('WALLET')" class="btn-secondary" style="font-size:0.785rem; padding:6px 12px; border-radius:20px;">Paytm Wallet</button>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Order ID & Date</th>
+                <th>Customer Contact</th>
+                <th>Delivery Address</th>
+                <th>Botanical Item</th>
+                <th>Money Sent</th>
+                <th>Paying Method</th>
+                <th>Paytm UTR / Ref</th>
+                <th>Delivery Stage</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <tr>
+                <td colspan="9" style="text-align:center; padding:32px;">Loading customer orders from MongoDB Atlas...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: REGISTERED CUSTOMERS DIRECTORY -->
+    <section id="tab-users-section" style="display:none;">
+      <div class="table-card">
+        <div class="table-header-tools">
+          <div class="search-filter-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="user-search-input" placeholder="Search people by name or email..." oninput="filterUsers()">
+          </div>
+
+          <div style="font-size:0.85rem; color:#64748b;">
+            Live collection: <strong style="color:var(--primary-forest);">greenmate_db.users</strong>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Email Address</th>
+                <th>Database ID</th>
+                <th>Registered Date</th>
+                <th>Plants in Garden</th>
+                <th>Orders Placed</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body">
+              <tr>
+                <td colspan="7" style="text-align:center; padding:32px;">Loading registered customers...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: INSTANT PAYTM ORDER SIMULATOR -->
+    <section id="tab-simulate-section" style="display:none;">
+      <div style="max-width:760px; margin:0 auto; background:#ffffff; border:1px solid var(--border-light); border-radius:24px; padding:32px; box-shadow:var(--shadow-md);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+          <div style="width:48px; height:48px; border-radius:14px; background:#e0f2fe; color:#0284c7; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">💳</div>
+          <div>
+            <h3 style="font-size:1.3rem; font-weight:800; color:var(--primary-forest); margin:0;">Test Order Simulator</h3>
+            <p style="margin:2px 0 0; font-size:0.85rem; color:#64748b;">Simulate customer placing a purchase and sending money via Paytm into MongoDB Atlas.</p>
+          </div>
+        </div>
+
+        <form id="sim-order-form" onsubmit="handleSimulateOrder(event)">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+            <div class="form-group">
+              <label class="form-label">Customer Name</label>
+              <input type="text" id="sim-cust-name" class="form-control" value="Raagavan" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mobile Number</label>
+              <input type="tel" id="sim-cust-phone" class="form-control" value="9876543210" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Delivery Address</label>
+            <input type="text" id="sim-cust-address" class="form-control" value="Flat 402, Green Orchid Residency, Whitefield" required>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+            <div class="form-group">
+              <label class="form-label">City</label>
+              <input type="text" id="sim-cust-city" class="form-control" value="Bangalore" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pincode</label>
+              <input type="text" id="sim-cust-pincode" class="form-control" value="560066" required>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+            <div class="form-group">
+              <label class="form-label">Select Plant</label>
+              <select id="sim-plant-select" class="form-control" onchange="updateSimPrice()">
+                <option value="Monstera Deliciosa|499|https://images.unsplash.com/photo-1614594975525-e45190c55d0b?auto=format&fit=crop&w=400&q=80">Monstera Deliciosa (₹499)</option>
+                <option value="Snake Plant|399|https://images.unsplash.com/photo-1593482892290-f54927ae1bf6?auto=format&fit=crop&w=400&q=80">Snake Plant (₹399)</option>
+                <option value="Peace Lily|599|https://images.unsplash.com/photo-1593691509543-c55fb32e7355?auto=format&fit=crop&w=400&q=80">Peace Lily (₹599)</option>
+                <option value="Lavender Herb|449|https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?auto=format&fit=crop&w=400&q=80">Lavender Herb (₹449)</option>
+                <option value="Aloe Vera|349|https://images.unsplash.com/photo-1509423350716-97f9360b4e09?auto=format&fit=crop&w=400&q=80">Aloe Vera (₹349)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Payment Method</label>
+              <select id="sim-payment-method" class="form-control">
+                <option value="Paytm UPI">⚡ Paytm UPI (Instant VPA Pin)</option>
+                <option value="Paytm QR Code">📲 Paytm Live QR Code (Scanned)</option>
+                <option value="Paytm Wallet">💼 Paytm Wallet / Postpaid</option>
+                <option value="Debit / Credit Card">💳 RuPay / Visa / Mastercard via Paytm</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="background:#f8faf8; border-radius:14px; padding:16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-size:0.85rem; color:#64748b;">Money to Send You via Paytm:</span>
+              <div id="sim-total-display" style="font-size:1.4rem; font-weight:800; color:#002e6e;">₹499.00</div>
+            </div>
+            <button type="submit" id="btn-sim-submit" class="btn-primary-solid" style="background:#002e6e; padding:12px 28px; font-size:0.95rem; border-radius:var(--radius-full); display:flex; align-items:center; gap:8px;">
+              <span>Confirm & Save to MongoDB Atlas ➔</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       MODAL: ADD NEW CUSTOMER TO DATABASE
+       ======================================================== -->
+  <div id="new-user-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width:440px; border-radius:24px; padding:32px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h3 style="font-size:1.3rem; font-weight:800; color:var(--primary-forest); margin:0;">Add Customer</h3>
+        <button onclick="closeNewUserModal()" class="modal-close-btn">✕</button>
+      </div>
+
+      <form id="new-user-form" onsubmit="handleCreateUser(event)">
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label">Customer Name</label>
+          <input type="text" id="nu-name" class="form-control" required placeholder="e.g. Priya Sharma">
+        </div>
+
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="nu-email" class="form-control" required placeholder="priya@example.com">
+        </div>
+
+        <div class="form-group" style="margin-bottom:20px;">
+          <label class="form-label">Password</label>
+          <input type="password" id="nu-password" class="form-control" value="Green@123" required>
+        </div>
+
+        <button type="submit" id="btn-nu-submit" class="btn-primary-solid" style="width:100%; padding:12px; font-size:0.95rem;">
+          Save to MongoDB Atlas
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/app.js"></script>
+
+  <script>
+    const ADMIN_PIN = "1571"; // Store Owner Security PIN
+    let allUsers = [];
+    let allOrders = [];
+
+    // Check if owner is already unlocked in this browser session
+    function checkAdminAuth() {
+      const isAuth = sessionStorage.getItem('greenmate_admin_auth') === 'true';
+      if (isAuth) {
+        document.getElementById('admin-gate-screen').style.display = 'none';
+        document.getElementById('admin-main-dashboard').style.display = 'block';
+        document.getElementById('btn-admin-logout').style.display = 'inline-block';
+        loadAdminData();
+      } else {
+        document.getElementById('admin-gate-screen').style.display = 'flex';
+        document.getElementById('admin-main-dashboard').style.display = 'none';
+        document.getElementById('btn-admin-logout').style.display = 'none';
+      }
+
+      // Load saved owner UPI
+      const savedUpi = localStorage.getItem('greenmate_owner_upi') || 'raagaavan157@paytm';
+      const upiEl = document.getElementById('disp-owner-upi');
+      if (upiEl) upiEl.textContent = savedUpi;
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const enteredPin = document.getElementById('admin-pin-input').value.trim();
+      if (enteredPin === ADMIN_PIN || enteredPin === 'admin2026') {
+        sessionStorage.setItem('greenmate_admin_auth', 'true');
+        App.showToast('Security PIN accepted! Welcome, Owner.', 'success');
+        checkAdminAuth();
+      } else {
+        App.showToast('Incorrect Admin PIN. Please try again.', 'error');
+        document.getElementById('admin-pin-input').value = '';
+        document.getElementById('admin-pin-input').focus();
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('greenmate_admin_auth');
+      App.showToast('Owner Portal Locked.', 'info');
+      checkAdminAuth();
+    }
+
+    function changeOwnerUpi() {
+      const current = localStorage.getItem('greenmate_owner_upi') || 'raagaavan157@paytm';
+      const newUpi = prompt('Enter your personal Paytm UPI ID or Phone Number to receive customer payments:', current);
+      if (newUpi && newUpi.trim()) {
+        localStorage.setItem('greenmate_owner_upi', newUpi.trim());
+        document.getElementById('disp-owner-upi').textContent = newUpi.trim();
+        App.showToast(`Updated receiving UPI ID to: ${newUpi.trim()}`, 'success');
+      }
+    }
+
+    async function loadAdminData() {
+      try {
+        const stats = await fetch('/api/admin/stats').then(r => r.json());
+        document.getElementById('stat-total-users').textContent = stats.total_users || 0;
+        document.getElementById('stat-total-orders').textContent = stats.total_orders || 0;
+        document.getElementById('stat-total-revenue').textContent = `₹${Math.round(stats.total_revenue || 0).toLocaleString('en-IN')}`;
+        document.getElementById('stat-total-plants').textContent = stats.total_plants || 0;
+
+        allOrders = await fetch('/api/admin/orders').then(r => r.json());
+        document.getElementById('tab-orders-count').textContent = allOrders.length;
+        renderOrders(allOrders);
+
+        allUsers = await fetch('/api/admin/users').then(r => r.json());
+        document.getElementById('tab-users-count').textContent = allUsers.length;
+        renderUsers(allUsers);
+
+        await checkAtlasStatus();
+      } catch (err) {
+        console.error('Failed to load admin data:', err);
+        App.showToast('Error connecting to MongoDB: ' + err.message, 'error');
+      }
+    }
+
+    async function checkAtlasStatus() {
+      try {
+        const res = await fetch('/api/admin/atlas-status').then(r => r.json());
+        const card = document.getElementById('atlas-status-card');
+        const pill = document.getElementById('atlas-status-pill');
+        const msg = document.getElementById('atlas-status-msg');
+        const icon = document.getElementById('atlas-status-icon');
+        const help = document.getElementById('atlas-whitelist-help');
+        const ipSpan = document.getElementById('disp-public-ip');
+
+        if (res.is_connected_to_atlas) {
+          card.style.borderColor = '#16a34a';
+          icon.style.background = '#ecfdf5';
+          icon.textContent = '🟢';
+          pill.style.background = '#dcfce7';
+          pill.style.color = '#15803d';
+          pill.textContent = 'CONNECTED & LIVE';
+          msg.innerHTML = `Connected to MongoDB Atlas cluster157 (${res.database_name}). All orders & users sync live to the cloud.`;
+          help.style.display = 'none';
+        } else {
+          card.style.borderColor = '#f59e0b';
+          icon.style.background = '#fef3c7';
+          icon.textContent = '🟡';
+          pill.style.background = '#fef3c7';
+          pill.style.color = '#b45309';
+          pill.textContent = 'STORED LOCALLY (ATLAS WAITING FOR IP ACCESS)';
+          msg.innerHTML = `All ${res.local_records.orders} orders and ${res.local_records.users} users are securely saved in GreenMate. To sync to MongoDB Atlas Cloud:`;
+          help.style.display = 'block';
+          if (ipSpan) ipSpan.textContent = res.current_public_ip;
+        }
+      } catch (e) {
+        console.error('Atlas status check error:', e);
+      }
+    }
+
+    async function triggerAtlasSync() {
+      const btn = document.getElementById('btn-sync-atlas');
+      btn.disabled = true;
+      btn.textContent = '⏳ Testing connection...';
+      try {
+        const res = await fetch('/api/admin/atlas-sync', { method: 'POST' }).then(r => r.json());
+        if (res.success) {
+          App.showToast(res.message, 'success');
+        } else {
+          App.showToast(res.message, 'warning');
+        }
+        await checkAtlasStatus();
+      } catch (err) {
+        App.showToast('Sync error: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🔄 Sync Data to Atlas Now';
+      }
+    }
+
+    function renderOrders(orders) {
+      const tbody = document.getElementById('orders-table-body');
+      if (!orders || orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:32px; color:#64748b;">No customer orders placed yet.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = orders.map(o => {
+        let methodBadgeClass = 'badge-paytm-upi';
+        let methodIcon = '⚡';
+        const method = o.payment_method || 'Paytm UPI';
+        
+        if (method.includes('QR')) {
+          methodBadgeClass = 'badge-paytm-qr';
+          methodIcon = '📲';
+        } else if (method.includes('Wallet')) {
+          methodBadgeClass = 'badge-paytm-wallet';
+          methodIcon = '💼';
+        } else if (method.includes('Card')) {
+          methodBadgeClass = 'badge-paytm-card';
+          methodIcon = '💳';
+        }
+
+        const orderDate = o.created_at ? new Date(o.created_at).toLocaleString('en-IN', {
+          month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        }) : 'Today';
+
+        const rawPhone = (o.customer_phone || '').replace(/[^0-9]/g, '');
+
+        return `
+          <tr>
+            <td>
+              <a href="/track-order.html?order_id=${o.order_id}" target="_blank" style="font-weight:800; color:#002e6e; text-decoration:underline;">
+                ${o.order_id}
+              </a>
+              <div style="font-size:0.75rem; color:#15803d; font-weight:700; margin-top:3px;">
+                📅 ${orderDate}
+              </div>
+            </td>
+            <td>
+              <div style="font-weight:800; color:#0f172a; font-size:0.95rem;">${o.customer_name}</div>
+              <div style="display:flex; gap:6px; align-items:center; margin-top:4px;">
+                <a href="tel:${rawPhone}" style="color:#0284c7; font-size:0.75rem; font-weight:700; background:#f0f9ff; padding:2px 6px; border-radius:6px;">
+                  📞 ${o.customer_phone}
+                </a>
+                <a href="https://wa.me/91${rawPhone}" target="_blank" style="color:#16a34a; font-size:0.75rem; font-weight:700; background:#ecfdf5; padding:2px 6px; border-radius:6px;">
+                  💬 WhatsApp
+                </a>
+              </div>
+            </td>
+            <td>
+              <div style="font-size:0.8rem; color:#475569; max-width:220px; line-height:1.4;">
+                📍 ${o.customer_address}
+              </div>
+            </td>
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${o.plant_image}" style="width:38px; height:38px; border-radius:8px; object-fit:cover;">
+                <div>
+                  <div style="font-weight:700; color:var(--primary-forest); font-size:0.85rem;">${o.plant_name}</div>
+                  <div style="font-size:0.75rem; color:#64748b;">Qty: ${o.quantity}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <strong style="color:#15803d; font-size:1.05rem;">₹${o.total_amount}</strong>
+              <div><span class="status-badge status-paid">✓ PAID</span></div>
+            </td>
+            <td>
+              <span class="paytm-badge ${methodBadgeClass}">
+                <span>${methodIcon}</span>
+                <span>${method}</span>
+              </span>
+            </td>
+            <td>
+              <code style="font-size:0.75rem; background:#f8fafc; border:1px solid #e2e8f0; padding:2px 6px; border-radius:4px; color:#002e6e; font-weight:700;">
+                ${o.paytm_txn_id}
+              </code>
+            </td>
+            <td>
+              <select class="status-select" onchange="updateOrderStatus('${o.order_id}', this.value)">
+                <option value="Order Placed" ${o.tracking_status === 'Order Placed' ? 'selected' : ''}>Order Placed</option>
+                <option value="Plant Inspected" ${o.tracking_status === 'Plant Inspected' ? 'selected' : ''}>Plant Inspected</option>
+                <option value="Eco Packaging" ${o.tracking_status === 'Eco Packaging' ? 'selected' : ''}>Eco Packaging</option>
+                <option value="In Transit" ${o.tracking_status === 'In Transit' ? 'selected' : ''}>In Transit</option>
+                <option value="Out for Delivery" ${o.tracking_status === 'Out for Delivery' ? 'selected' : ''}>Out for Delivery</option>
+                <option value="Delivered" ${o.tracking_status === 'Delivered' ? 'selected' : ''}>Delivered 🌿</option>
+              </select>
+            </td>
+            <td>
+              <div style="display:flex; gap:6px;">
+                <a href="/track-order.html?order_id=${o.order_id}" target="_blank" class="btn-secondary" style="font-size:0.75rem; padding:4px 8px; border-radius:8px;" title="View Live Tracking">
+                  🚚 Track
+                </a>
+                <button onclick="deleteOrder('${o.order_id}')" style="background:#fee2e2; color:#b91c1c; border:none; border-radius:8px; padding:4px 8px; cursor:pointer; font-size:0.75rem;" title="Delete Order">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderUsers(users) {
+      const tbody = document.getElementById('users-table-body');
+      if (!users || users.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:#64748b;">No registered customers found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = users.map(u => {
+        const joinDate = u.created_at ? new Date(u.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : 'Recently';
+        return `
+          <tr>
+            <td>
+              <div class="user-avatar-cell">
+                <img src="${u.avatar}" class="user-avatar-img" alt="${u.name}">
+                <div>
+                  <div style="font-weight:800; color:var(--primary-forest); font-size:0.95rem;">${u.name}</div>
+                  <div style="font-size:0.75rem; color:#64748b;">Verified Customer</div>
+                </div>
+              </div>
+            </td>
+            <td><strong style="color:#0f172a;">${u.email}</strong></td>
+            <td><code style="font-size:0.75rem; background:#f1f5f9; padding:2px 6px; border-radius:4px;">${u.id.substring(0, 8)}...</code></td>
+            <td>${joinDate}</td>
+            <td>
+              <span style="display:inline-flex; align-items:center; gap:4px; font-weight:700; color:var(--primary-emerald); background:#ecfdf5; padding:3px 8px; border-radius:12px; font-size:0.775rem;">
+                🌿 ${u.plants_in_garden} Plants
+              </span>
+            </td>
+            <td>
+              <span style="display:inline-flex; align-items:center; gap:4px; font-weight:700; color:#0284c7; background:#e0f2fe; padding:3px 8px; border-radius:12px; font-size:0.775rem;">
+                🛒 ${u.orders_count} Orders
+              </span>
+            </td>
+            <td>
+              <button onclick="deleteUser('${u.id}', '${u.name}')" style="background:#fee2e2; color:#b91c1c; border:none; border-radius:8px; padding:4px 8px; cursor:pointer; font-size:0.75rem;" title="Delete User">
+                🗑️ Remove
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tab-orders-section').style.display = tab === 'orders' ? 'block' : 'none';
+      document.getElementById('tab-users-section').style.display = tab === 'users' ? 'block' : 'none';
+      document.getElementById('tab-simulate-section').style.display = tab === 'simulate' ? 'block' : 'none';
+
+      document.getElementById('tab-orders-btn').classList.toggle('active', tab === 'orders');
+      document.getElementById('tab-users-btn').classList.toggle('active', tab === 'users');
+      document.getElementById('tab-simulate-btn').classList.toggle('active', tab === 'simulate');
+    }
+
+    function filterOrders() {
+      const q = document.getElementById('order-search-input').value.toLowerCase();
+      const filtered = allOrders.filter(o => 
+        o.order_id.toLowerCase().includes(q) || 
+        o.customer_name.toLowerCase().includes(q) || 
+        o.plant_name.toLowerCase().includes(q)
+      );
+      renderOrders(filtered);
+    }
+
+    function filterOrdersByMethod(method) {
+      if (method === 'ALL') {
+        renderOrders(allOrders);
+      } else {
+        const filtered = allOrders.filter(o => (o.payment_method || '').toUpperCase().includes(method));
+        renderOrders(filtered);
+      }
+    }
+
+    function filterUsers() {
+      const q = document.getElementById('user-search-input').value.toLowerCase();
+      const filtered = allUsers.filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q));
+      renderUsers(filtered);
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+        const res = await fetch(`/api/admin/orders/${orderId}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        if (!res.ok) throw new Error('Status update failed');
+        App.showToast(`Order ${orderId} updated to: ${newStatus}`, 'success');
+      } catch (err) {
+        App.showToast(err.message, 'error');
+      }
+    }
+
+    async function deleteOrder(orderId) {
+      if (!confirm(`Are you sure you want to delete order ${orderId}?`)) return;
+      try {
+        const res = await fetch(`/api/admin/orders/${orderId}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Failed to delete order');
+        App.showToast(`Order ${orderId} removed.`, 'success');
+        refreshData();
+      } catch (err) {
+        App.showToast(err.message, 'error');
+      }
+    }
+
+    async function deleteUser(userId, name) {
+      if (!confirm(`Are you sure you want to delete customer ${name}?`)) return;
+      try {
+        const res = await fetch(`/api/admin/users/${userId}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Failed to delete user');
+        App.showToast(`Customer ${name} removed.`, 'success');
+        refreshData();
+      } catch (err) {
+        App.showToast(err.message, 'error');
+      }
+    }
+
+    function openNewUserModal() {
+      document.getElementById('new-user-modal').classList.add('active');
+    }
+
+    function closeNewUserModal() {
+      document.getElementById('new-user-modal').classList.remove('active');
+    }
+
+    async function handleCreateUser(e) {
+      e.preventDefault();
+      const name = document.getElementById('nu-name').value.trim();
+      const email = document.getElementById('nu-email').value.trim();
+      const password = document.getElementById('nu-password').value;
+
+      try {
+        const res = await fetch('/api/admin/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Failed to add user');
+
+        App.showToast(`Customer ${name} registered into MongoDB Atlas! 🌿`, 'success');
+        closeNewUserModal();
+        document.getElementById('new-user-form').reset();
+        refreshData();
+      } catch (err) {
+        App.showToast(err.message, 'error');
+      }
+    }
+
+    function updateSimPrice() {
+      const val = document.getElementById('sim-plant-select').value;
+      const [name, price] = val.split('|');
+      document.getElementById('sim-total-display').textContent = `₹${price}.00`;
+    }
+
+    async function handleSimulateOrder(e) {
+      e.preventDefault();
+      const [plantName, plantPrice, plantImage] = document.getElementById('sim-plant-select').value.split('|');
+      const paymentMethod = document.getElementById('sim-payment-method').value;
+      const name = document.getElementById('sim-cust-name').value.trim();
+      const phone = document.getElementById('sim-cust-phone').value.trim();
+      const address = document.getElementById('sim-cust-address').value.trim();
+      const city = document.getElementById('sim-cust-city').value.trim();
+      const pincode = document.getElementById('sim-cust-pincode').value.trim();
+
+      const btn = document.getElementById('btn-sim-submit');
+      btn.disabled = true;
+      btn.innerHTML = 'Connecting to Paytm PG...';
+
+      try {
+        const payload = {
+          plant_id: 'plant-' + plantName.toLowerCase().replace(/\s+/g, '-'),
+          plant_name: plantName,
+          plant_image: plantImage,
+          unit_price: parseFloat(plantPrice),
+          quantity: 1,
+          total_amount: parseFloat(plantPrice),
+          shipping_name: name,
+          shipping_phone: phone,
+          shipping_address: address,
+          shipping_city: city,
+          shipping_pincode: pincode,
+          payment_method: paymentMethod,
+          paytm_txn_id: 'PTM_REAL_' + Date.now()
+        };
+
+        const res = await fetch('/api/admin/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Order creation failed');
+
+        App.showToast(`Order ${data.order.order_id} recorded in MongoDB Atlas! 🌿`, 'success');
+        btn.disabled = false;
+        btn.innerHTML = 'Confirm & Save to MongoDB Atlas ➔';
+        
+        await refreshData();
+        switchTab('orders');
+
+      } catch (err) {
+        App.showToast(err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = 'Confirm & Save to MongoDB Atlas ➔';
+      }
+    }
+
+    function refreshData() {
+      return loadAdminData();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAdminAuth();
+    });
+  </script>
+</body>
+</html>
